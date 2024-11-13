@@ -1,0 +1,309 @@
+// Sets the game up if no save data could be found
+defineFunction(InitializeDefaultSaveData, void)
+{
+    natoRep = BASE_NATO_REP;
+    ussrRep = BASE_USSR_REP;
+
+    if (BASE_DIFFICULTY ? 1)
+    {
+        REP_TRADE_PER_TON = REP_TRADE_PER_TON * 3;
+        REP_TRADE_PER_FAV_TON = REP_TRADE_PER_FAV_TON * 3;
+        REP_TRADE_PER_SPECIAL_TON = REP_TRADE_PER_SPECIAL_TON * 3;
+        REP_TRADE_DROP_PER_SPECIAL_TON = REP_TRADE_DROP_PER_SPECIAL_TON / 3;
+        REP_CENTERING_ABOVE = REP_CENTERING_ABOVE / 3;
+        REP_CENTERING_BELOW = REP_CENTERING_BELOW * 3;
+    }
+    elseif (BASE_DIFFICULTY ? 2)
+    {
+        REP_TRADE_PER_TON = REP_TRADE_PER_TON * 1.5;
+        REP_TRADE_PER_FAV_TON = REP_TRADE_PER_FAV_TON * 1.5;
+        REP_TRADE_PER_SPECIAL_TON = REP_TRADE_PER_SPECIAL_TON * 1.5;
+        REP_TRADE_DROP_PER_SPECIAL_TON = REP_TRADE_DROP_PER_SPECIAL_TON / 1.5;
+        REP_CENTERING_ABOVE = REP_CENTERING_ABOVE / 1.5;
+        REP_CENTERING_BELOW = REP_CENTERING_BELOW * 1.5;
+    }
+    elseif (BASE_DIFFICULTY ? 4)
+    {
+        REP_TRADE_PER_TON = REP_TRADE_PER_TON / 1.5;
+        REP_TRADE_PER_FAV_TON = REP_TRADE_PER_FAV_TON / 1.5;
+        REP_TRADE_PER_SPECIAL_TON = REP_TRADE_PER_SPECIAL_TON / 1.5;
+        REP_TRADE_DROP_PER_SPECIAL_TON = REP_TRADE_DROP_PER_SPECIAL_TON * 1.5;
+        REP_CENTERING_ABOVE = REP_CENTERING_ABOVE * 1.5;
+        REP_CENTERING_BELOW = REP_CENTERING_BELOW / 1.5;
+    }
+    elseif (BASE_DIFFICULTY ? 5)
+    {
+        REP_TRADE_PER_TON = REP_TRADE_PER_TON / 3;
+        REP_TRADE_PER_FAV_TON = REP_TRADE_PER_FAV_TON / 3;
+        REP_TRADE_PER_SPECIAL_TON = REP_TRADE_PER_SPECIAL_TON / 3;
+        REP_TRADE_DROP_PER_SPECIAL_TON = REP_TRADE_DROP_PER_SPECIAL_TON * 3;
+        REP_CENTERING_ABOVE = REP_CENTERING_ABOVE * 3;
+        REP_CENTERING_BELOW = REP_CENTERING_BELOW / 3;
+    }
+
+    returnVoid();
+}
+
+// Caps the float to set decimal places
+defineArray(char[16], floatLimitedToDecimalPlaces);
+defineArray(char[16], floatToDecimalLimitTemp1);
+defineArray(char[16], floatToDecimalLimitTemp2);
+defineArray(char[16], floatToDecimalLimitTemp3);
+defineVariable(char, floatToDecimalLimitTemp);
+defineFunction(LimitDecimalPlaces, void, float:float_to_limit_decimals, int:decimal_count)
+{
+    strcpy(floatLimitedToDecimalPlaces, "");
+    strcpy(floatToDecimalLimitTemp1, "");
+    strcpy(floatToDecimalLimitTemp2, "");
+    strcpy(floatToDecimalLimitTemp3, "");
+
+    strcpy(floatToDecimalLimitTemp1, float_to_limit_decimals);  // copy float to char[]
+    strlen(floatToDecimalLimitTemp1, temp_i4);                  // get length (will include the ".")
+    strstr(floatToDecimalLimitTemp1, ".", temp_i5);             // find the "."
+
+    for (j = 0, j < temp_i4, j = j + 1)
+    {
+        temp_i6 = j - temp_i5;
+        floatToDecimalLimitTemp = floatToDecimalLimitTemp1[j];
+        if (j < temp_i5)
+        {
+            // get everything before the decimal
+            strcat(floatToDecimalLimitTemp2, floatToDecimalLimitTemp);
+        }
+        elseif (temp_i6 > 0)
+        {
+            // get everything after the decimal
+            strcat(floatToDecimalLimitTemp3, floatToDecimalLimitTemp);
+        }
+    }
+
+    if (decimal_count ? 0) {
+        strcpy(floatLimitedToDecimalPlaces, floatToDecimalLimitTemp2);
+    }
+    else()
+    {
+        strcat(floatToDecimalLimitTemp2, ".");
+        temp_i6 = temp_i4 - temp_i5 - 1;
+
+        if (temp_i6 < decimal_count)
+        {
+            // Add more decimals needed
+            for (j = temp_i6, j < decimal_count, j = j + 1)
+            {
+                strcat(floatToDecimalLimitTemp3, "0");
+            }
+
+            strcat(floatToDecimalLimitTemp2, floatToDecimalLimitTemp3);
+            strcpy(floatLimitedToDecimalPlaces, floatToDecimalLimitTemp2);;
+        }
+        else()
+        {
+            for (j = 0, j < decimal_count, j = j + 1)
+            {
+                floatToDecimalLimitTemp = floatToDecimalLimitTemp3[j];
+                strcat(floatToDecimalLimitTemp2, floatToDecimalLimitTemp);
+            }
+
+            strcpy(floatLimitedToDecimalPlaces, floatToDecimalLimitTemp2);
+        }
+    }
+
+    returnVoid();
+}
+
+defineArray(char[16], convertedFloatToCharLength);
+defineArray(char[16], convertedFloatToCharLengthTemp1);
+defineArray(char[16], convertedFloatToCharLengthTemp2);
+defineArray(char[16], convertedFloatToCharLengthTemp3);
+defineVariable(char, convertedFloatToCharLengthTemp);
+defineFunction(ConvertFloatToCharLength, void, float:float_to_convert_to_length, int:float_max_length)
+{
+    // convert the float into a specific number of decimals first
+    LimitDecimalPlaces(float_to_convert_to_length, 2);
+    strcpy(convertedFloatToCharLengthTemp1, floatLimitedToDecimalPlaces);
+    strcpy(convertedFloatToCharLength, convertedFloatToCharLengthTemp1);
+    
+    strlen(convertedFloatToCharLengthTemp1, temp_i4);                            // get length (will include the ".")
+    strstr(convertedFloatToCharLengthTemp1, ".", temp_i5);                       // find the "."
+
+    for (j = 0, j < temp_i4, j = j + 1)
+    {
+        temp_i6 = j - temp_i5;
+        convertedFloatToCharLengthTemp = convertedFloatToCharLengthTemp1[j];
+        if (j < temp_i5)
+        {
+            // get everything before the decimal
+            strcat(convertedFloatToCharLengthTemp2, convertedFloatToCharLengthTemp);
+        }
+        elseif (temp_i6 > 0)
+        {
+            // get everything after the decimal
+            strcat(convertedFloatToCharLengthTemp3, convertedFloatToCharLengthTemp);
+        }
+    }
+
+    if (temp_i4 ? float_max_length)
+    {
+        returnVoid();
+    }
+    elseif (temp_i4 < float_max_length)
+    {
+        strcpy(convertedFloatToCharLength, "");
+        temp_i6 = float_max_length - temp_i4;
+        for (j = 0, j < temp_i6, j = j + 1)
+        {
+            strcat(convertedFloatToCharLength, "0");
+        }
+        strcat(convertedFloatToCharLength, convertedFloatToCharLengthTemp1);
+    }
+    else()
+    {
+        strcpy(convertedFloatToCharLength, "");
+        for (j = 0, j < float_max_length, j = j + 1)
+        {
+            convertedFloatToCharLengthTemp = convertedFloatToCharLengthTemp1[j];
+            strcat(convertedFloatToCharLength, convertedFloatToCharLengthTemp);
+        }
+    }
+
+    returnVoid();
+}
+
+defineFunction(CreateSaveData, void)
+{
+    temp_i2 = day + year * 365;
+    strcat(natoSaveTag, "n_");
+    strcat(ussrSaveTag, "u_");
+
+    //ConvertFloatToCharLength(natoRep, 6);
+    ConvertFloatToCharLength(natoRep, 8);
+    strcat(natoSaveTag, convertedFloatToCharLength);
+    strcat(natoSaveTag, "_d_");
+    strcat(natoSaveTag, temp_i2);
+
+    //ConvertFloatToCharLength(ussrRep, 6);
+    ConvertFloatToCharLength(natoRep, 8);
+    strcat(ussrSaveTag, convertedFloatToCharLength);
+    strcat(ussrSaveTag, "_d_");
+    strcat(ussrSaveTag, temp_i2);
+
+    for (i = 0, i < buildingCount, i = i + 1)
+    {
+        building.GetDataByIndex(i);
+        if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & building.fPercFinished > 0.999 & building.nSubType ? BUILDINGSUBTYPE_AIRCUSTOM)
+        {            
+            houseType = building.nBorder_USD1_Rub2;
+
+            if (houseType ? 1)
+            {
+                strcat(temp_c1, "Nato");
+                strcat(temp_c1, NEWLINE);
+
+                Building_SetTagChar(natoSaveTag, i);
+                strcat(temp_c1, "adding default: ");
+                strcat(temp_c1, natoSaveTag);
+                strcat(temp_c1, NEWLINE);
+            }
+            else()
+            {
+                strcat(temp_c1, "Soviet");
+                strcat(temp_c1, NEWLINE);
+                
+                Building_SetTagChar(ussrSaveTag, i);
+                strcat(temp_c1, "adding default: ");
+                strcat(temp_c1, ussrSaveTag);
+                strcat(temp_c1, NEWLINE);
+            }
+
+        }
+    }
+
+    Scenario_WindowWithImageLeft("test", temp_c1, "", 4);
+    returnVoid();
+}
+
+defineFunction(ProcessSaveData, void)
+{
+
+    returnVoid();
+}
+
+// Reads in the save data tags and acts on them
+defineFunction(ReadSaveData, void)
+{
+    strcpy(temp_c1, "");
+    strcpy(natoSaveTag, "");
+    strcpy(ussrSaveTag, "");
+
+    Building_GetNumberOfBuildings(buildingCount);
+    Date_GetCurrentDate_D365Y(day, year);
+    for (i = 0, i < buildingCount, i = i + 1)
+    {
+        building.GetDataByIndex(i);
+        if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & building.fPercFinished > 0.999 & building.nSubType ? BUILDINGSUBTYPE_AIRCUSTOM)
+        {            
+            houseType = building.nBorder_USD1_Rub2;
+
+            strcat(temp_c1, "House Type: ");
+            if (houseType ? 1)
+            {
+                strcat(temp_c1, "Nato");
+                strcat(temp_c1, NEWLINE);
+
+                Building_GetCharTag(i, natoSaveTag);
+                strlen(natoSaveTag, temp_i1);
+                if (temp_i1 ? 0)
+                {
+                    strcat(temp_c1, "missing data");
+                    strcat(temp_c1, NEWLINE);
+                    temp_b1 = 0;
+                }
+                else()
+                {
+                    strcat(temp_c1, "found data");
+                    strcat(temp_c1, NEWLINE);
+                    temp_b1 = 1;
+                }
+            }
+            else()
+            {
+                strcat(temp_c1, "Soviet");
+                strcat(temp_c1, NEWLINE);
+
+                Building_GetCharTag(i, ussrSaveTag);
+                strlen(ussrSaveTag, temp_i1);
+                if (temp_i1 ? 0)
+                {
+                    strcat(temp_c1, "missing data");
+                    strcat(temp_c1, NEWLINE);
+                    temp_b2 = 0;
+                }
+                else()
+                {
+                    strcat(temp_c1, "found data");
+                    strcat(temp_c1, NEWLINE);
+                    temp_b2 = 1;
+                }
+            }
+
+        }
+    }
+
+    // If we found both files, process the saves
+    if (temp_b1 ? 1 & temp_b2 ? 1)
+    {
+        freshLoad = 0;
+        ProcessSaveData();
+    }
+    else()
+    {
+        freshLoad = 1;
+        CreateSaveData();
+    }
+
+    returnVoid();
+}
+
+//temp_3v1 = building.vPosition;
+//Vec3ToCharArray(temp_3v1);
+//strcat(temp_c1, _vec3_outChar);

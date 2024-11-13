@@ -1,0 +1,88 @@
+include("include/SOVIETInstructions.txt");
+include("include/declarations.txt");
+include("settings.txt");
+include("include/helper_functions.txt");
+include("include/save_functions.txt");
+
+defineFunction(main, void)
+{
+	InitConstants();
+    InitSettings();
+
+    // Intitialize variables
+    NEWLINE = 10;
+    // Defaults before loading the saves
+    InitializeDefaultSaveData();
+    
+    Script_GetGameTime(time);
+    Script_GetGameTime(timeLast);
+    Script_EnterCriticalSection();
+    ReadSaveData();
+    Script_LeaveCriticalSection();
+
+    while (1 ? 1)
+    {
+		game.GetCurrentGameSettigns();
+
+        Script_GetGameTime(time);
+        if (time > timeLast)
+        {
+            Script_EnterCriticalSection();
+
+            Window_GetLastWindow(windowId);
+            if (windowId ? -1)
+            {
+                clickedObjectId = -1;
+            }
+            else()
+            {
+                window.GetDataByIndex(windowId);
+                if (window.nValidRead & window.nReferenceObjectType ? SOVIET_OBJECT_BUILDING & !(clickedObjectId ? window.nRefObjectIndex))
+                {
+                    clickedObjectId = window.nRefObjectIndex;
+                    building.GetDataByIndex(clickedObjectId);
+                    Scenario_WindowExists(windowExists);
+                    if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & !(building.nSubType ? BUILDINGSUBTYPE_ROAD) & building.fPercFinished > 0.999 & !windowExists)
+                    {
+                        houseType = building.nBorder_USD1_Rub2;
+
+                        if (houseType ? 1)
+                        {
+                            temp_s1 = "Nato Relations and Contracts";
+                            temp_s2 = "editor/border_west.png";
+                            temp_f1 = natoRep;
+                        }
+                        else ()
+                        {
+                            temp_s1 = "Soviet Relations and Contracts";
+                            temp_s2 = "editor/border_east.png";
+                            temp_f1 = ussrRep;
+                        }
+
+                        strcpy(windowText, "");
+
+                        strcat(windowText, "Penultimo greets you");
+                        strcat(windowText, NEWLINE);
+                        strcat(windowText, "Type: ");
+                        strcat(windowText, houseType);
+                        strcat(windowText, " ");
+                        strcat(windowText, temp_s1);
+                        strcat(windowText, " ");
+                        strcat(windowText, NEWLINE);
+                        strcat(windowText, NEWLINE);
+                        strcat(windowText, "Reputation: ");
+                        strcat(windowText, temp_f1);
+
+                        Scenario_WindowWithImageTopLeft(temp_s1, windowText, temp_s2, 3);
+                    }
+                }
+            }
+
+            timeLast = time;
+            Script_LeaveCriticalSection();
+        }
+        Script_Sleep(1.0);
+    }
+
+    end();
+}

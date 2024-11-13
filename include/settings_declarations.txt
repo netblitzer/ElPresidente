@@ -1,0 +1,12 @@
+defineVariable(int, BASE_NATO_REP);
+defineVariable(int, BASE_USSR_REP);
+defineVariable(int, MAX_NORMAL_TRADE_REP);
+defineVariable(int, MAX_FAV_TRADE_REP);
+defineVariable(float, REP_TRADE_PER_TON);
+defineVariable(float, REP_TRADE_PER_FAV_TON);
+defineVariable(float, REP_TRADE_PER_SPECIAL_TON);
+defineVariable(float, REP_TRADE_DROP_PER_SPECIAL_TON);
+defineVariable(float, REP_CENTERING_ABOVE);
+defineVariable(float, REP_CENTERING_BELOW);
+
+defineVariable(int, BASE_DIFFICULTY);

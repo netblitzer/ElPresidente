@@ -1,0 +1,28 @@
+include("include/SOVIETInstructions.txt");
+include("include/declarations.txt");
+defineVariable(char, script);
+
+defineFunction(main, void)
+{
+	InitConstants();
+	Script_Exists("presidente.txt", script);
+	if(script ? 1)
+	{
+		Script_DestroyByName("presidente.txt");
+	}
+
+    Script_EnterCriticalSection();
+    Building_GetNumberOfBuildings(buildingCount);
+    for (i = 0, i < buildingCount, i = i + 1)
+    {
+        building.GetDataByIndex(i);
+        if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & building.fPercFinished > 0.999 & building.nSubType ? BUILDINGSUBTYPE_AIRCUSTOM)
+        {
+            strcpy(temp_c2, "");
+            Building_SetTagChar(temp_c2, i);
+        }
+    }
+    Script_LeaveCriticalSection();
+
+	end();
+}

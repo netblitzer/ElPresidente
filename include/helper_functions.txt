@@ -1,0 +1,79 @@
+defineFunction(MaxInt, int, int:i_a, int:i_b)
+{
+    if (i_a < i_b)
+    {
+        return(i_b);
+    }
+    return(i_a);
+}
+
+defineFunction(MinInt, int, int:i_c, int:i_d)
+{
+    if (i_a < i_b)
+    {
+        return(i_a);
+    }
+    return(i_b);
+}
+
+defineFunction(ClampInt, int, int:i_cVal, int:i_cMin, int:i_cMax)
+{
+    if (i_cVal < i_cMin)
+    {
+        return(i_cMin);
+    }
+    elseif (i_cVal > i_cMax)
+    {
+        return(i_cMax);
+    }
+    return(i_cVal);
+}
+
+defineFunction(MaxFloat, float, float:f_a, float:f_b)
+{
+    if (f_a < f_b)
+    {
+        return(f_b);
+    }
+    return(f_a);
+}
+
+defineFunction(MinFloat, float, float:f_c, float:f_d)
+{
+    if (f_c < f_d)
+    {
+        return(f_c);
+    }
+    return(f_d);
+}
+
+defineFunction(ClampFloat, float, float:f_cVal, float:f_cMin, float:f_cMax)
+{
+    if (f_cVal < f_cMin)
+    {
+        return(f_cMin);
+    }
+    elseif (f_cVal > f_cMax)
+    {
+        return(f_cMax);
+    }
+    return(f_cVal);
+}
+
+defineVariable(float, _helper_f1);
+defineArray(char[64], _vec3_outChar);
+defineFunction(Vec3ToCharArray, void, vec3:vec3_convertToChar)
+{
+    strcpy(_vec3_outChar, "(");
+    _helper_f1 = vec3_convertToChar.x;
+    strcat(_vec3_outChar, _helper_f1);
+    strcat(_vec3_outChar, ", ");
+    _helper_f1 = vec3_convertToChar.y;
+    strcat(_vec3_outChar, _helper_f1);
+    strcat(_vec3_outChar, ", ");
+    _helper_f1 = vec3_convertToChar.z;
+    strcat(_vec3_outChar, _helper_f1);
+    strcat(_vec3_outChar, ")");
+
+    returnVoid();
+}

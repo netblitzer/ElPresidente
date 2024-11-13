@@ -1,0 +1,59 @@
+defineVariable(int, i);
+defineVariable(int, j);
+defineVariable(int, temp_i1);
+defineVariable(int, temp_i2);
+defineVariable(int, temp_i3);
+defineVariable(int, temp_i4);
+defineVariable(int, temp_i5);
+defineVariable(int, temp_i6);
+defineVariable(char, temp_b1);
+defineVariable(char, temp_b2);
+defineVariable(char, temp_b3);
+defineVariable(char, temp_b4);
+defineVariable(float, temp_f1);
+defineVariable(float, temp_f2);
+defineVariable(float, temp_f3);
+defineVariable(float, temp_f4);
+defineArray(char[1024], temp_c1);
+defineArray(char[1024], temp_c2);
+defineVariable(string, temp_s1);
+defineVariable(string, temp_s2);
+defineVariable(vec3, temp_3v1);
+defineVariable(char, NEWLINE);
+
+defineVariable(int, day);
+defineVariable(int, month);
+defineVariable(int, year);
+defineVariable(int, dayLast);
+defineVariable(int, monthLast);
+defineVariable(int, yearLast);
+defineVariable(int, houseType);
+defineVariable(float, time);
+defineVariable(float, timeLast);
+defineVariable(int, buildingCount);
+defineVariable(Building, building);
+defineVariable(GameSetting, game);
+
+defineArray(char[64], natoSaveTag);
+defineArray(char[64], ussrSaveTag);
+defineVariable(char, freshLoad);
+defineVariable(float, natoRep);
+defineVariable(float, ussrRep);
+
+defineVariable(int, bottomNeutralThreshold);
+defineVariable(int, topNeutralThreshold);
+
+defineVariable(int, windowId);
+defineVariable(int, windowExists);
+defineVariable(Window, window);
+defineVariable(int, clickedObjectId);
+defineArray(char[1024], windowText);
+
+
+defineStruct(presContract, 277)
+{
+    defineStructVariable(presContract, int, id);
+    defineStructVariable(presContract, string, name);
+    defineStructVariable(presContract, string, image);
+    defineStructVariable(presContract, string, contractText);
+}
