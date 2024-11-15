@@ -3,6 +3,21 @@ include("include/declarations.txt");
 include("settings.txt");
 include("include/helper_functions.txt");
 include("include/save_functions.txt");
+include("include/dialogue/dialogues.txt");
+
+defineFunction(CalculatePassiveRepChange, float, float:_repToChange)
+{
+    temp_f1 = _repToChange;
+    if (_repToChange < 250)
+    {
+        temp_f1 = temp_f1 + (REP_CENTERING_BELOW / 1000) * (250 - _repToChange) * (250 - _repToChange);
+    }
+    elseif (_repToChange > 500)
+    {
+        temp_f1 = temp_f1 - (REP_CENTERING_ABOVE / 1000) * (500 - _repToChange) * (500 - _repToChange);
+    }
+    return(temp_f1);
+}
 
 defineFunction(main, void)
 {
@@ -12,7 +27,7 @@ defineFunction(main, void)
     // Intitialize variables
     NEWLINE = 10;
     // Defaults before loading the saves
-    InitializeDefaultSaveData();
+    InitializeDefaultData();
     
     Script_GetGameTime(time);
     Script_GetGameTime(timeLast);
@@ -20,68 +35,138 @@ defineFunction(main, void)
     ReadSaveData();
     Script_LeaveCriticalSection();
 
+    if (tutorialState ? 1)
+    {
+        TutorialMessage1();
+        tutorialState = 2;
+        timer_1 = 0;
+    }
+
     while (1 ? 1)
     {
 		game.GetCurrentGameSettigns();
+
+        if (tutorialState > 0)
+        {
+            timer_1 = timer_1 + 1;
+            Scenario_WindowExists(windowExists);
+
+            if (timer_1 > 5 & !windowExists)
+            {
+                if (tutorialState ? 2)
+                {
+                    TutorialMessage2();
+                    tutorialState = 3;
+                    timer_1 = 0;
+                }
+                elseif (tutorialState ? 3)
+                {
+                    TutorialMessage3();
+                    tutorialState = 0;
+                    timer_1 = 0;
+                }
+            }
+        }
 
         Script_GetGameTime(time);
         if (time > timeLast)
         {
             Script_EnterCriticalSection();
+            saveLongDay = GetLongDay();
 
-            Window_GetLastWindow(windowId);
-            if (windowId ? -1)
+            if ((saveLongDay - lastSaveLongDay > 2 | lastSaveLongDay - saveLongDay > 2) & justLoaded ? 0)
             {
-                clickedObjectId = -1;
+                // The player used a timeskip!
+                // CancelContract(contract1); etc...
+            }
+            elseif (justLoaded ? 1)
+            {
+                justLoaded = 0;
+            }
+
+            // Process game state
+            if (saveLongDay > lastSaveLongDay)
+            {
+                // Move reputations towards the center over time
+                natoRep = CalculatePassiveRepChange(natoRep);
+                ussrRep = CalculatePassiveRepChange(ussrRep);
+            }
+
+            Objective_Exist("reputation", objectiveExists);
+            if (objectiveExists)
+            {
+                Objective_UpdateRequirement("reputation", 0, ussrRep);
+                Objective_UpdateRequirement("reputation", 1, natoRep);
             }
             else()
             {
-                window.GetDataByIndex(windowId);
-                if (window.nValidRead & window.nReferenceObjectType ? SOVIET_OBJECT_BUILDING & !(clickedObjectId ? window.nRefObjectIndex))
-                {
-                    clickedObjectId = window.nRefObjectIndex;
-                    building.GetDataByIndex(clickedObjectId);
-                    Scenario_WindowExists(windowExists);
-                    if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & !(building.nSubType ? BUILDINGSUBTYPE_ROAD) & building.fPercFinished > 0.999 & !windowExists)
-                    {
-                        houseType = building.nBorder_USD1_Rub2;
-
-                        if (houseType ? 1)
-                        {
-                            temp_s1 = "Nato Relations and Contracts";
-                            temp_s2 = "editor/border_west.png";
-                            temp_f1 = natoRep;
-                        }
-                        else ()
-                        {
-                            temp_s1 = "Soviet Relations and Contracts";
-                            temp_s2 = "editor/border_east.png";
-                            temp_f1 = ussrRep;
-                        }
-
-                        strcpy(windowText, "");
-
-                        strcat(windowText, "Penultimo greets you");
-                        strcat(windowText, NEWLINE);
-                        strcat(windowText, "Type: ");
-                        strcat(windowText, houseType);
-                        strcat(windowText, " ");
-                        strcat(windowText, temp_s1);
-                        strcat(windowText, " ");
-                        strcat(windowText, NEWLINE);
-                        strcat(windowText, NEWLINE);
-                        strcat(windowText, "Reputation: ");
-                        strcat(windowText, temp_f1);
-
-                        Scenario_WindowWithImageTopLeft(temp_s1, windowText, temp_s2, 3);
-                    }
-                }
+                Objectives_CreateNewString("reputation", "Reputation");
+                Objective_AddRequirement("reputation", 0.0, "images/east_icon.png");
+                Objective_UpdateRequirement("reputation", 0, ussrRep);
+                Objective_AddRequirement("reputation", 0.0, "images/west_icon.png");
+                Objective_UpdateRequirement("reputation", 1, natoRep);
             }
 
             timeLast = time;
+            dayLast = day;
+            // monthLast = month;
+            yearLast =  year;
+            lastSaveLongDay = saveLongDay;
+
+            UpdateSaveData();
+
             Script_LeaveCriticalSection();
         }
-        Script_Sleep(1.0);
+        
+        Window_GetLastWindow(windowId);
+        if (windowId ? -1)
+        {
+            clickedObjectId = -1;
+        }
+        else()
+        {
+            window.GetDataByIndex(windowId);
+            if (window.nValidRead & window.nReferenceObjectType ? SOVIET_OBJECT_BUILDING & !(clickedObjectId ? window.nRefObjectIndex))
+            {
+                clickedObjectId = window.nRefObjectIndex;
+                building.GetDataByIndex(clickedObjectId);
+                Scenario_WindowExists(windowExists);
+                if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & !(building.nSubType ? BUILDINGSUBTYPE_ROAD) & building.fPercFinished > 0.999 & !windowExists)
+                {
+                    houseType = building.nBorder_USD1_Rub2;
+
+                    if (houseType ? 1)
+                    {
+                        temp_s1 = "Nato Relations and Contracts";
+                        temp_s2 = "editor/border_west.png";
+                        temp_f1 = natoRep;
+                    }
+                    else ()
+                    {
+                        temp_s1 = "Soviet Relations and Contracts";
+                        temp_s2 = "editor/border_east.png";
+                        temp_f1 = ussrRep;
+                    }
+
+                    strcpy(windowText, "");
+
+                    ReputationMessage();
+                    strcat(windowText, NEWLINE);
+                    strcat(windowText, "Type: ");
+                    strcat(windowText, houseType);
+                    strcat(windowText, " ");
+                    strcat(windowText, temp_s1);
+                    strcat(windowText, " ");
+                    strcat(windowText, NEWLINE);
+                    strcat(windowText, NEWLINE);
+                    strcat(windowText, "Reputation: ");
+                    strcat(windowText, temp_f1);
+
+                    Scenario_WindowWithImageTopLeft(temp_s1, windowText, temp_s2, 3);
+                }
+            }
+        }
+        Script_Sleep(2.0);
     }
 
     end();

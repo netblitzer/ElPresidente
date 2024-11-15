@@ -1,0 +1,139 @@
+defineFunction(TutorialMessage1, void)
+{
+    strcpy(windowText, "");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "El Presidente! It is I, your loyal Penultimo! I'm so happy to meet you here! ");
+    strcat(windowText, "I wasn't sure if I got off on the right boat, but with you here I'm sure I did.");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "I think we're finding ourselves in a precarious position, like a coconut about to drop from a tree. ");
+    strcat(windowText, "On one side we have the resourceful and generous Soviets; on the other, the capable and deep pocketed NATO! ");
+    strcat(windowText, "And with us being the sandwich between two giant seagulls that haven't eaten in days, ");
+    strcat(windowText, "I fear that playing both sides may prove difficult. But I'm sure you're more than capable, El Presidente!");
+
+    Scenario_WindowWithImageTopLeft("Penultimo greets you!", windowText, "images/penultimo.png", 3);
+    returnVoid();
+}
+
+defineFunction(TutorialMessage2, void)
+{
+    strcpy(windowText, "");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "El Presidente! Occassionally these two factions may ask us for some assistance that's too far below their ");
+    strcat(windowText, "worthy hands. And if we get very close with them, they might even ask us to help with some safety matters! ");
+    strcat(windowText, "Don't worry, El Presidente, I've been reassured that no danger can come of us. And as you know, bears and eagles ");
+    strcat(windowText, "would never lie to the weak mouse at their feet!");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "If we'd like to get closer with them, I'd recommend trading valuable commodities with them and completing the ");
+    strcat(windowText, "tasks they request of us. Who knows, maybe we'll get treats out of it even!");
+
+    Scenario_WindowWithImageTopLeft("Some words of advice...", windowText, "images/penultimo.png", 3);
+    returnVoid();
+}
+
+defineFunction(TutorialMessage3, void)
+{
+    strcpy(windowText, "");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "I've done my best to gather some paperwork for what trinkets each faction likes being sent. I think there's ");
+    strcat(windowText, "more they like, but I don't have the heart levels to see them yet.");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "The Soviet Bear:");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "Likes: Electronics, Electronic Components, Chemicals, Ships");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "Loves: Steel, Plastic, Trains, Trucks");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "The NATO Eagle:");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "Likes: Electronics, Electronic Components, Chemicals, Ships");
+    strcat(windowText, NEWLINE);
+    strcat(windowText, "Loves: Oil, Fuel, Aluminum, Planes, Cars");
+
+    Scenario_WindowWithImageTopLeft("An incomplete wishlist", windowText, "images/penultimo.png", 3);
+    returnVoid();
+}
+
+defineFunction(ReputationMessage, void)
+{
+    if (houseType ? 1)
+    {
+        strcpy(temp_c3, "NATO");
+        strcpy(temp_c4, "eagle");
+        strcpy(temp_c4, "NATO conglomorate");
+        strcpy(temp_c4, "NATO");
+        temp_f1 = natoRep;
+    }
+    else()
+    {
+        strcpy(temp_c3, "Soviet");
+        strcpy(temp_c4, "bear");
+        strcpy(temp_c5, "Soviet Republic");
+        strcpy(temp_c6, "Soviets");
+        temp_f1 = ussrRep;
+    }
+
+    strcat(windowText, NEWLINE);
+    
+    if (temp_f1 < 100)
+    {
+        strcat(windowText, "Aiiiieeee! El Presidente, what have you done?! How did you get the ");
+        strcat(windowText, temp_c3);
+        strcat(windowText, " forces so angry with us? And why?! Oh Presidente, I fear for our safety and those ");
+        strcat(windowText, "of our people! I hope you know what you're doing because you just decided to ");
+        
+        Random(random);
+        random = random % 2;
+        if (random ? 0)
+        {
+            strcat(windowText, "cut the cables of the elevator we're riding!");
+        }
+        elseif(random ? 1)
+        {
+            strcat(windowText, "throw our only bucket away on a sinking ship!");
+        }
+    }
+    elseif (temp_f1 < 200)
+    {
+        strcat(windowText, "Presidente, we're treading very dangerous waters here. No one has ever gotten the ");
+        strcat(windowText, temp_c4);
+        strcat(windowText, " this mad and lived to tell the tale a year later. Our people are suffering for your ");
+        strcat(windowText, "risks. I pray you figure this situation out soon, or maybe we're already doomed!");
+    }
+    elseif (temp_f1 < 250)
+    {
+        strcat(windowText, "El Presidente, the ");
+        strcat(windowText, temp_c3);
+        strcat(windowText, " traders aren't pleased at all with us. They're treating us like a monkey trying to ");
+        strcat(windowText, "take the fruit from their hands. I suggest we try to fix this quickly or things could ");
+        strcat(windowText, "become quite precarious for our peoples.");
+    }
+    elseif (temp_f1 < 350)
+    {
+        strcat(windowText, "I've heard some minor grumbles and complaints, but nothing serious. The ");
+        strcat(windowText, temp_c5);
+        strcat(windowText, " thinks we could do better, but overall we're just another small fly buzzing around for ");
+        strcat(windowText, "them to ignore.");
+    }
+    elseif (temp_f1 < 450)
+    {
+        strcat(windowText, "We're average");
+    }
+    elseif (temp_f1 < 650)
+    {
+        strcat(windowText, "We're quite good");
+    }
+    elseif (temp_f1 < 800)
+    {
+        strcat(windowText, "We're very good");
+    }
+    else()
+    {
+        strcat(windowText, "We're the best");        
+    }
+
+    returnVoid();
+}
+//☭

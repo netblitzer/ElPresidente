@@ -6,7 +6,7 @@ defineFunction(InitSettings, void)
     // Warning: Allowing it to go too low can lead to soft-locking!
     // ---- Earning/Losing Reputation ----
     // -- Trading --
-    // Resource delivery will slowly provide reputation up to a certain threshold: MAX_NORMAL_TRADE_REP
+    // Resource delivery through trade will slowly provide reputation up to a certain threshold: MAX_NORMAL_TRADE_REP
     //  Alcohol, Aluminum, Aluminum Scrap, Bitumen, Clothes, Explosives, Fuel, Meat, Mechanical Components, Plastics, Steel, Uranium Oxide
     // Each faction has favorite resources that will raise your reputation quicker to a max: MAX_FAV_TRADE_REP
     //  USSR: Steel, Plastic, trains, cargo trucks
@@ -17,24 +17,24 @@ defineFunction(InitSettings, void)
     //
     // ---- Reputation Effects ----
     // -- Trading --
-    // At 100 and below, the faction will no longer trade with you at all.
-    // At 200 and below, the faction will not trade medium value resources with you.
+    // At below 100, the faction will no longer trade with you at all.
+    // At below 200, the faction will not trade medium value resources with you.
     //  USSR: Fuel, Aluminum
     //  NATO: Oil, Plastic, Mechanical Components
     //  Both: Steel
-    // At 250 and below, the faction will not trade high value resources with you. 
+    // At below 250, the faction will not trade high value resources with you. 
     //  USSR: Plastic, Mechanical Components
     //  NATO: Fuel, Aluminum
     //  Both: Uranium, Nuclear Fuel, Explosives, Chemicals, Electronics, Electronic Components
-    // At 350 and below the purchase cost of resources will begin to increase and the selling price will begin to decrease
-    // At 450 and above the purchase cost of resources will begin to decrease and the selling price will begin to increase
+    // At below 350, the purchase cost of resources will begin to increase and the selling price will begin to decrease
+    // At above 450, the purchase cost of resources will begin to decrease and the selling price will begin to increase
     //
     // -- Blueprints and Vehicles --
-    // At 150 and below, the faction will not sell trucks, cars, or boats and their blueprints
-    // At 200 and below, the faction will not sell trains, trams, or metros and their blueprints
-    // At 250 and below, the faction will not sell airplanes and their blueprints
-    // At 650 and above, the faction may start giving vehicles as gifts
-    // At 800 and above, the faction may start giving blueprints as gifts
+    // At below 150, the faction will not sell trucks, cars, or boats and their blueprints
+    // At below 200, the faction will not sell trains, trams, or metros and their blueprints
+    // At below 250, the faction will not sell airplanes and their blueprints
+    // At above 650, the faction may start giving vehicles as gifts
+    // At above 800, the faction may start giving blueprints as gifts
     
 
     // ====================================================================================== //
@@ -57,7 +57,7 @@ defineFunction(InitSettings, void)
     // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv //
 
 // By default, NATO starts less friendly and USSR starts friendlier
-    BASE_NATO_REP = 350;
+    BASE_NATO_REP = 0;
     BASE_USSR_REP = 450;
 
     MAX_NORMAL_TRADE_REP = 550;
@@ -71,7 +71,7 @@ defineFunction(InitSettings, void)
 
 // A modifier to bring your reputation back to neutral levels over time
     REP_CENTERING_ABOVE = 0.015;
-    REP_CENTERING_BELOW = 0.04;
+    REP_CENTERING_BELOW = 0.035;
     
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ //
     //  Advanced values to further modify and balance the difficulty to your preference.      //

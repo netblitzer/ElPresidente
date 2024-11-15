@@ -1,5 +1,19 @@
+// Save data is stored in tags on the overseas customs houses
+// An example save: u_603.29_0715954|02_0715600_0900_000|
+// Split up: 
+//  u       -> ussr
+//  603.29  -> rep with faction
+//  0715954 -> day of save from 1/1/0000
+//  |       -> split between base data and missions
+//  02      -> contract type 2
+//  0715600 -> contract start date
+//  0900    -> contract duration
+//  000     -> contract spare data (for sorties, etc)
+//  |       -> split between missions
+// Saves can have up to five missions with a length of 117
+
 // Sets the game up if no save data could be found
-defineFunction(InitializeDefaultSaveData, void)
+defineFunction(InitializeDefaultData, void)
 {
     natoRep = BASE_NATO_REP;
     ussrRep = BASE_USSR_REP;
@@ -171,59 +185,66 @@ defineFunction(ConvertFloatToCharLength, void, float:float_to_convert_to_length,
 
 defineFunction(CreateSaveData, void)
 {
-    temp_i2 = day + year * 365;
-    strcat(natoSaveTag, "n_");
-    strcat(ussrSaveTag, "u_");
+    saveLongDay = GetLongDay();
+    strcpy(natoSaveTag, "n_");
+    strcpy(ussrSaveTag, "u_");
 
-    //ConvertFloatToCharLength(natoRep, 6);
-    ConvertFloatToCharLength(natoRep, 8);
+    ConvertFloatToCharLength(natoRep, 6);
     strcat(natoSaveTag, convertedFloatToCharLength);
-    strcat(natoSaveTag, "_d_");
-    strcat(natoSaveTag, temp_i2);
+    strcat(natoSaveTag, "_");
+    strcat(natoSaveTag, saveLongDay);
 
-    //ConvertFloatToCharLength(ussrRep, 6);
-    ConvertFloatToCharLength(natoRep, 8);
+    ConvertFloatToCharLength(ussrRep, 6);
     strcat(ussrSaveTag, convertedFloatToCharLength);
-    strcat(ussrSaveTag, "_d_");
-    strcat(ussrSaveTag, temp_i2);
+    strcat(ussrSaveTag, "_");
+    strcat(ussrSaveTag, saveLongDay);
 
-    for (i = 0, i < buildingCount, i = i + 1)
-    {
-        building.GetDataByIndex(i);
-        if (building.nType ? BUILDINGTYPE_CUSTOMHOUSE & building.fPercFinished > 0.999 & building.nSubType ? BUILDINGSUBTYPE_AIRCUSTOM)
-        {            
-            houseType = building.nBorder_USD1_Rub2;
+    Building_SetTagChar(natoSaveTag, natoCustom);
+    Building_SetTagChar(ussrSaveTag, ussrCustom);
 
-            if (houseType ? 1)
-            {
-                strcat(temp_c1, "Nato");
-                strcat(temp_c1, NEWLINE);
-
-                Building_SetTagChar(natoSaveTag, i);
-                strcat(temp_c1, "adding default: ");
-                strcat(temp_c1, natoSaveTag);
-                strcat(temp_c1, NEWLINE);
-            }
-            else()
-            {
-                strcat(temp_c1, "Soviet");
-                strcat(temp_c1, NEWLINE);
-                
-                Building_SetTagChar(ussrSaveTag, i);
-                strcat(temp_c1, "adding default: ");
-                strcat(temp_c1, ussrSaveTag);
-                strcat(temp_c1, NEWLINE);
-            }
-
-        }
-    }
-
-    Scenario_WindowWithImageLeft("test", temp_c1, "", 4);
     returnVoid();
 }
 
+defineArray(char[16], processSaveDataTemp1);
+defineArray(char[16], processSaveDataTemp2);
+defineArray(char[16], processSaveDataTemp3);
+defineArray(char[16], processSaveDataTemp4);
+defineVariable(char, processSaveDataTemp);
 defineFunction(ProcessSaveData, void)
 {
+    strcpy(processSaveDataTemp1, "");
+    strcpy(processSaveDataTemp2, "");
+
+    strcat(temp_c1, natoSaveTag);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, ussrSaveTag);
+    strcat(temp_c1, NEWLINE);
+
+    for (i = 2, i < 8, i = i + 1)
+    {
+        processSaveDataTemp = natoSaveTag[i];
+        strcat(processSaveDataTemp1, processSaveDataTemp);
+        processSaveDataTemp = ussrSaveTag[i];
+        strcat(processSaveDataTemp2, processSaveDataTemp);
+    }
+    atof(processSaveDataTemp1, natoRep);
+    atof(processSaveDataTemp2, ussrRep);
+
+    strcpy(processSaveDataTemp3, "");
+
+    for (i = 9, i < 16, i = i + 1)
+    {
+        processSaveDataTemp = natoSaveTag[i];
+        strcat(processSaveDataTemp3, processSaveDataTemp);
+    }
+    atoi(processSaveDataTemp3, lastSaveLongDay);
+
+    strcat(temp_c1, processSaveDataTemp1);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, processSaveDataTemp2);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, processSaveDataTemp3);
+    Scenario_WindowWithImageTopLeft("test2", temp_c1, "", 3);
 
     returnVoid();
 }
@@ -236,7 +257,6 @@ defineFunction(ReadSaveData, void)
     strcpy(ussrSaveTag, "");
 
     Building_GetNumberOfBuildings(buildingCount);
-    Date_GetCurrentDate_D365Y(day, year);
     for (i = 0, i < buildingCount, i = i + 1)
     {
         building.GetDataByIndex(i);
@@ -244,44 +264,31 @@ defineFunction(ReadSaveData, void)
         {            
             houseType = building.nBorder_USD1_Rub2;
 
-            strcat(temp_c1, "House Type: ");
             if (houseType ? 1)
             {
-                strcat(temp_c1, "Nato");
-                strcat(temp_c1, NEWLINE);
-
+                natoCustom = i;
                 Building_GetCharTag(i, natoSaveTag);
                 strlen(natoSaveTag, temp_i1);
                 if (temp_i1 ? 0)
                 {
-                    strcat(temp_c1, "missing data");
-                    strcat(temp_c1, NEWLINE);
                     temp_b1 = 0;
                 }
                 else()
                 {
-                    strcat(temp_c1, "found data");
-                    strcat(temp_c1, NEWLINE);
                     temp_b1 = 1;
                 }
             }
             else()
             {
-                strcat(temp_c1, "Soviet");
-                strcat(temp_c1, NEWLINE);
-
+                ussrCustom = i;
                 Building_GetCharTag(i, ussrSaveTag);
                 strlen(ussrSaveTag, temp_i1);
                 if (temp_i1 ? 0)
                 {
-                    strcat(temp_c1, "missing data");
-                    strcat(temp_c1, NEWLINE);
                     temp_b2 = 0;
                 }
                 else()
                 {
-                    strcat(temp_c1, "found data");
-                    strcat(temp_c1, NEWLINE);
                     temp_b2 = 1;
                 }
             }
@@ -289,17 +296,48 @@ defineFunction(ReadSaveData, void)
         }
     }
 
+    justLoaded = 1;
+
     // If we found both files, process the saves
     if (temp_b1 ? 1 & temp_b2 ? 1)
     {
-        freshLoad = 0;
+        tutorialState = 0;
         ProcessSaveData();
     }
     else()
     {
-        freshLoad = 1;
+// FIX THIS FIX THIS FIX THIS FIX THIS FIX THIS
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+        tutorialState = 0;
         CreateSaveData();
     }
+    
+    Objectives_CreateNewString("reputation", "Reputation");
+    Objective_AddRequirement("reputation", 0.0, "images/east_icon.png");
+    Objective_UpdateRequirement("reputation", 0, ussrRep);
+    Objective_AddRequirement("reputation", 0.0, "images/west_icon.png");
+    Objective_UpdateRequirement("reputation", 1, natoRep);
+
+    returnVoid();
+}
+
+defineFunction(UpdateSaveData, void)
+{
+    strcpy(natoSaveTag, "n_");
+    strcpy(ussrSaveTag, "u_");
+
+    ConvertFloatToCharLength(natoRep, 6);
+    strcat(natoSaveTag, convertedFloatToCharLength);
+    strcat(natoSaveTag, "_");
+    strcat(natoSaveTag, saveLongDay);
+
+    ConvertFloatToCharLength(ussrRep, 6);
+    strcat(ussrSaveTag, convertedFloatToCharLength);
+    strcat(ussrSaveTag, "_");
+    strcat(ussrSaveTag, saveLongDay);
+
+    Building_SetTagChar(natoSaveTag, natoCustom);
+    Building_SetTagChar(ussrSaveTag, ussrCustom);
 
     returnVoid();
 }

@@ -6,6 +6,8 @@ defineVariable(int, temp_i3);
 defineVariable(int, temp_i4);
 defineVariable(int, temp_i5);
 defineVariable(int, temp_i6);
+defineVariable(int, timer_1);
+defineVariable(int, timer_2);
 defineVariable(char, temp_b1);
 defineVariable(char, temp_b2);
 defineVariable(char, temp_b3);
@@ -16,11 +18,16 @@ defineVariable(float, temp_f3);
 defineVariable(float, temp_f4);
 defineArray(char[1024], temp_c1);
 defineArray(char[1024], temp_c2);
+defineArray(char[1024], temp_c3);
+defineArray(char[1024], temp_c4);
+defineArray(char[256], temp_c5);
+defineArray(char[256], temp_c6);
 defineVariable(string, temp_s1);
 defineVariable(string, temp_s2);
 defineVariable(vec3, temp_3v1);
 defineVariable(char, NEWLINE);
 
+defineVariable(int, random);
 defineVariable(int, day);
 defineVariable(int, month);
 defineVariable(int, year);
@@ -33,12 +40,17 @@ defineVariable(float, timeLast);
 defineVariable(int, buildingCount);
 defineVariable(Building, building);
 defineVariable(GameSetting, game);
+defineVariable(int, justLoaded);
+defineVariable(int, natoCustom);
+defineVariable(int, ussrCustom);
 
-defineArray(char[64], natoSaveTag);
-defineArray(char[64], ussrSaveTag);
-defineVariable(char, freshLoad);
+defineArray(char[128], natoSaveTag);
+defineArray(char[128], ussrSaveTag);
+defineVariable(int, tutorialState);
 defineVariable(float, natoRep);
 defineVariable(float, ussrRep);
+defineVariable(int, saveLongDay);
+defineVariable(int, lastSaveLongDay);
 
 defineVariable(int, bottomNeutralThreshold);
 defineVariable(int, topNeutralThreshold);
@@ -48,6 +60,7 @@ defineVariable(int, windowExists);
 defineVariable(Window, window);
 defineVariable(int, clickedObjectId);
 defineArray(char[1024], windowText);
+defineVariable(int, objectiveExists);
 
 
 defineStruct(presContract, 277)

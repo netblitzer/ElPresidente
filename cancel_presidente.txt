@@ -9,5 +9,6 @@ defineFunction(main, void)
 		Script_DestroyByName("presidente.txt");
 	}
 
+    Objective_Remove("reputation");
 	end();
 }
