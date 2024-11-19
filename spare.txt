@@ -1,0 +1,82 @@
+
+    strcpy(temp_c1, "");
+    temp_i4 = 6;
+    temp_i5 = 7;
+    temp_i6 = 6;
+    Vehicle_Carry_GetVehicleID(temp_i4, temp_i5, temp_i6);
+    strcat(temp_c1, "1: ");
+    strcat(temp_c1, temp_i4);
+    strcat(temp_c1, " 2: ");
+    strcat(temp_c1, temp_i5);
+    strcat(temp_c1, " 3: ");
+    strcat(temp_c1, temp_i6);
+        strcat(temp_c1, NEWLINE);
+        strcat(temp_c1, NEWLINE);
+    Vehicle_GetNumberOfVehicles(vehicleCount);
+    for (i = 0, i < vehicleCount, i = i + 1)
+    {
+        vehicle.GetDataByIndex(i);
+        temp_c2 = vehicle.sIdent;
+        strcat(temp_c1, "identifier: ");
+        strcat(temp_c1, temp_c2);
+        strcat(temp_c1, " ID: ");
+        strcat(temp_c1, i);
+        strcat(temp_c1, NEWLINE);
+        temp_i4 = vehicle.nCarry_OtherVehiclesNum;
+        temp_i5 = vehicle.nCarry_OnOtherVehicleID;
+        strcat(temp_c1, "carrying: ");
+        strcat(temp_c1, temp_i4);
+        strcat(temp_c1, " on: ");
+        strcat(temp_c1, temp_i5);
+
+        if (vehicle.nVehicleType ? VEHICLETYPE_ROAD & (vehicle.nTransportType ? RESOURCE_TRANSPORT_OPEN | vehicle.nTransportType ? RESOURCE_TRANSPORT_VEHICLES))
+        {
+            temp_i4 = vehicle.nTransportType;
+            temp_i5 = vehicle.fResourceCapacity;
+            strcat(temp_c1, NEWLINE);
+            strcat(temp_c1, "Car carrier ");
+            strcat(temp_c1, "transportType: ");
+            strcat(temp_c1, temp_i4);
+            strcat(temp_c1, NEWLINE);
+            temp_i4 = vehicle.nSchedule_MovementBuildingNum;
+            temp_i5 = vehicle.nSchedule_MovementBuildingCurrent;
+            Vehicle_Schedule_StationGetBuildingID(i, temp_i5, temp_i6);
+            strcat(temp_c1, "heading: ");
+            strcat(temp_c1, temp_i4);
+            strcat(temp_c1, " next: ");
+            strcat(temp_c1, temp_i5);
+            strcat(temp_c1, " current: ");
+            strcat(temp_c1, temp_i6);
+            strcat(temp_c1, NEWLINE);
+            strcat(temp_c1, NEWLINE);
+        }
+        elseif (vehicle.nVehicleType ? VEHICLETYPE_ROAD & vehicle.nTransportType ? RESOURCE_TRANSPORT_PASSANGER)
+        {
+            temp_i4 = vehicle.nTransportType;
+            Vehicle_IsPartOfGroup(i, "personal", temp_i6);
+            strcat(temp_c1, NEWLINE);
+            strcat(temp_c1, "Bus/personal car ");
+            strcat(temp_c1, "transportType: ");
+            strcat(temp_c1, temp_i4);
+            strcat(temp_c1, " personal?: ");
+            strcat(temp_c1, temp_i6);
+            temp_i5 = vehicle.nSchedule_MovementBuildingCurrent;
+            strcat(temp_c1, " current: ");
+            strcat(temp_c1, temp_i5);
+            strcat(temp_c1, NEWLINE);
+            strcat(temp_c1, NEWLINE);
+        }
+    }
+    Scenario_WindowWithImageTopLeft("checks", temp_c1, "", 3);
+
+    
+
+defineArray(string[64], resourceNames);
+defineVariable(string, tradeCostFactorString);
+    resourceNames[RAWBAUXITE]   = "rawbauxite";
+    resourceNames[BAUXITE]      = "bauxite";
+    resourceNames[ALUMINA]      = "alumina";
+    resourceNames[ALUMINIUM]    = "aluminium";
+    resourceNames[RAWCOAL]      = "rawcoal";
+    resourceNames[COAL]         = "coal";
+    resourceNames[BRICKS]       = "bricks";

@@ -1,0 +1,49 @@
+include("include/trade_declarations.txt");
+
+defineFunction(InitTrade, void)
+{
+    InitTradeConsts();
+
+    returnVoid();
+}
+
+defineFunction(CalculateTrade, void)
+{
+    temp_i1 = lastSaveLongDay % 365;
+    temp_i2 = lastSaveLongDay / 365;
+    temp_i3 = saveLongDay % 365;
+    temp_i4 = saveLongDay / 365;
+    checkStats.GetFromDateToDate_D365Y(temp_i1, temp_i2, temp_i3, temp_i4);
+
+    Building_GetNumberOfBuildings(buildingCount);
+    Vehicle_GetNumberOfVehicles(vehicleCount);
+
+    natoResourcesIn = checkStats.ImportTonsUSD;
+    ussrResourcesIn = checkStats.ImportTonsRUB;
+    natoResourcesOut = checkStats.ExportTonsUSD;
+    ussrResourcesOut = checkStats.ExportTonsRUB;
+
+    strcpy(temp_c1, "day parse: ");
+    strcat(temp_c1, temp_i1);
+    strcat(temp_c1, " year parse: ");
+    strcat(temp_c1, temp_i2);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "day parse: ");
+    strcat(temp_c1, temp_i3);
+    strcat(temp_c1, " year parse: ");
+    strcat(temp_c1, temp_i4);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, " steel: ");
+    temp_f1 = natoResourcesOut.steel;
+    strcat(temp_c1, temp_f1);
+    strcat(temp_c1, NEWLINE);
+
+    if (natoResourcesOut.steel > 0)
+    {
+        natoRep = natoRep + (natoResourcesOut.steel * REP_TRADE_PER_FAV_TON);
+    }
+
+    Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    
+    returnVoid();
+}

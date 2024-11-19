@@ -4,6 +4,7 @@ include("settings.txt");
 include("include/helper_functions.txt");
 include("include/save_functions.txt");
 include("include/dialogue/dialogues.txt");
+include("include/trade.txt");
 
 defineFunction(CalculatePassiveRepChange, float, float:_repToChange)
 {
@@ -23,6 +24,7 @@ defineFunction(main, void)
 {
 	InitConstants();
     InitSettings();
+    InitTrade();
 
     // Intitialize variables
     NEWLINE = 10;
@@ -90,6 +92,8 @@ defineFunction(main, void)
                 // Move reputations towards the center over time
                 natoRep = CalculatePassiveRepChange(natoRep);
                 ussrRep = CalculatePassiveRepChange(ussrRep);
+
+                //CalculateTrade();
             }
 
             Objective_Exist("reputation", objectiveExists);

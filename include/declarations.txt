@@ -38,11 +38,18 @@ defineVariable(int, houseType);
 defineVariable(float, time);
 defineVariable(float, timeLast);
 defineVariable(int, buildingCount);
+defineVariable(int, vehicleCount);
 defineVariable(Building, building);
+defineVariable(Vehicle, vehicle);
 defineVariable(GameSetting, game);
 defineVariable(int, justLoaded);
 defineVariable(int, natoCustom);
 defineVariable(int, ussrCustom);
+defineVariable(StatRecord, checkStats);
+defineVariable(Resources, natoResourcesIn);
+defineVariable(Resources, ussrResourcesIn);
+defineVariable(Resources, natoResourcesOut);
+defineVariable(Resources, ussrResourcesOut);
 
 defineArray(char[128], natoSaveTag);
 defineArray(char[128], ussrSaveTag);

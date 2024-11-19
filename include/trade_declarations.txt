@@ -1,0 +1,545 @@
+defineArray(float[64], tradeRepMultipliers);    // Static array of rep per ton multiplier to make "dense" resources more impactful, "rep ton"
+
+defineArray(float[64], natoBuyMultipliers);     // NATO: Constant updating array of all the BUYING multipliers per resource
+defineArray(float[64], natoSellMultipliers);    // NATO: Constant updating array of all the SELLING multipliers per resource
+defineArray(float[64], ussrBuyMultipliers);     // USSR: Constant updating array of all the BUYING multipliers per resource
+defineArray(float[64], ussrSellMultipliers);    // USSR: Constant updating array of all the SELLING multipliers per resource
+
+defineArray(int[64], natoBuyDesire);            // NATO: Static array of the desire of the faction to BUY resources from the player
+defineArray(int[64], natoSellDesire);           // NATO: Static array of the desire of the faction to SELL resources to the player
+defineArray(int[64], ussrBuyDesire);            // USSR: Static array of the desire of the faction to BUY resources from the player
+defineArray(int[64], ussrSellDesire);           // USSR: Static array of the desire of the faction to SELL resources to the player
+
+defineArray(float[64], natoRepGainPer);         // NATO: Static array of the amount of reputation gained per "rep ton" of each resource
+defineArray(float[64], ussrRepGainPer);         // USSR: Static array of the amount of reputation gained per "rep ton" of each resource
+
+defineVariable(int, RAWBAUXITE);
+defineVariable(int, BAUXITE);
+defineVariable(int, ALUMINA);
+defineVariable(int, ALUMINIUM);
+
+defineVariable(int, RAWCOAL);
+defineVariable(int, COAL);
+defineVariable(int, BRICKS);
+
+defineVariable(int, RAWGRAVEL);
+defineVariable(int, GRAVEL);
+defineVariable(int, PREFABS);
+defineVariable(int, CEMENT);
+defineVariable(int, CONCRETE);
+defineVariable(int, ASPHALT);
+
+defineVariable(int, RAWIRON);
+defineVariable(int, IRON);
+defineVariable(int, STEEL);
+defineVariable(int, MCOMPONENTS);
+
+defineVariable(int, PLANTS);
+defineVariable(int, LIVESTOCK);
+defineVariable(int, MEAT);
+defineVariable(int, FOOD);
+defineVariable(int, ALCOHOL);
+defineVariable(int, FABRIC);
+defineVariable(int, CLOTHES);
+
+defineVariable(int, WOOD);
+defineVariable(int, BOARDS);
+defineVariable(int, EXPLOSIVES);
+
+defineVariable(int, OIL);
+defineVariable(int, FUEL);
+defineVariable(int, BITUMEN);
+defineVariable(int, CHEMICALS);
+defineVariable(int, PLASTICS);
+defineVariable(int, ECOMPONENTS);
+defineVariable(int, ELECTRONICS);
+
+defineVariable(int, URANIUM);
+defineVariable(int, YELLOWCAKE);
+defineVariable(int, UF6);
+defineVariable(int, NUCLEARFUEL);
+defineVariable(int, NUCLEARFUELBURNED);
+
+defineVariable(int, FERTILISER);
+defineVariable(int, FERTILISER_LIQUID);
+defineVariable(int, SERVICE_MATERIAL);
+
+defineVariable(int, WASTE_MIXED);
+defineVariable(int, WASTE_GRAVEL);
+defineVariable(int, WASTE_STEEL);
+defineVariable(int, WASTE_ALUMINIUM);
+defineVariable(int, WASTE_PLASTIC);
+defineVariable(int, WASTE_BIO);
+defineVariable(int, WASTE_BURNABLE);
+defineVariable(int, WASTE_ASH);
+defineVariable(int, WASTE_TOXIC);
+defineVariable(int, WASTE_OTHER);
+
+defineVariable(int, WATER);
+defineVariable(int, USAGEWATER);
+
+defineFunction(InitTradeConsts, void)
+{
+    RAWBAUXITE = 0;
+    BAUXITE = 1;
+    ALUMINA = 2;
+    ALUMINIUM = 3;
+    RAWCOAL = 4;
+    COAL = 5;
+    BRICKS = 6;
+    RAWGRAVEL = 7;
+    GRAVEL = 8;
+    PREFABS = 9;
+    CEMENT = 10;
+    CONCRETE = 11;
+    ASPHALT = 12;
+    RAWIRON = 13;
+    IRON = 14;
+    STEEL = 15;
+    MCOMPONENTS = 16;
+    PLANTS = 17;
+    LIVESTOCK = 18;
+    MEAT = 19;
+    FOOD = 20;
+    ALCOHOL = 21;
+    FABRIC = 22;
+    CLOTHES = 23;
+    WOOD = 24;
+    BOARDS = 25;
+    EXPLOSIVES = 26;
+    OIL = 27;
+    FUEL = 28;
+    BITUMEN = 29;
+    CHEMICALS = 30;
+    PLASTICS = 31;
+    ECOMPONENTS = 32;
+    ELECTRONICS = 33;
+    URANIUM = 34;
+    YELLOWCAKE = 35;
+    UF6 = 36;
+    NUCLEARFUEL = 37;
+    NUCLEARFUELBURNED = 38;
+    FERTILISER = 39;
+    FERTILISER_LIQUID = 40;
+    SERVICE_MATERIAL = 41;
+    WASTE_MIXED = 42;
+    WASTE_GRAVEL = 43;
+    WASTE_STEEL = 44;
+    WASTE_ALUMINIUM = 45;
+    WASTE_PLASTIC = 46;
+    WASTE_BIO = 47;
+    WASTE_BURNABLE = 48;
+    WASTE_ASH = 49;
+    WASTE_OTHER = 50;
+    WATER = 51;
+    USAGEWATER = 52;
+    
+
+    tradeRepMultipliers[RAWBAUXITE]           = 0.0013;
+    tradeRepMultipliers[BAUXITE]              = 0.0017;
+    tradeRepMultipliers[ALUMINA]              = 0.004;
+    tradeRepMultipliers[ALUMINIUM]            = 0.04;
+    tradeRepMultipliers[RAWCOAL]              = 0.001;
+    tradeRepMultipliers[COAL]                 = 0.0012;
+    tradeRepMultipliers[BRICKS]               = 0.0067;
+    tradeRepMultipliers[RAWGRAVEL]            = 0.0004;
+    tradeRepMultipliers[GRAVEL]               = 0.0005;
+    tradeRepMultipliers[PREFABS]              = 0.01;
+    tradeRepMultipliers[CEMENT]               = 0.004;
+    tradeRepMultipliers[CONCRETE]             = 0.005;
+    tradeRepMultipliers[ASPHALT]              = 0.005;
+    tradeRepMultipliers[RAWIRON]              = 0.0013;
+    tradeRepMultipliers[IRON]                 = 0.002;
+    tradeRepMultipliers[STEEL]                = 0.04;
+    tradeRepMultipliers[MCOMPONENTS]          = 0.2;
+    tradeRepMultipliers[PLANTS]               = 0.002;
+    tradeRepMultipliers[LIVESTOCK]            = 0.005;
+    tradeRepMultipliers[MEAT]                 = 0.02;
+    tradeRepMultipliers[FOOD]                 = 0.005;
+    tradeRepMultipliers[ALCOHOL]              = 0.0133;
+    tradeRepMultipliers[FABRIC]               = 0.0286;
+    tradeRepMultipliers[CLOTHES]              = 0.0833;
+    tradeRepMultipliers[WOOD]                 = 0.001;
+    tradeRepMultipliers[BOARDS]               = 0.004;
+    tradeRepMultipliers[EXPLOSIVES]           = 0.1;
+    tradeRepMultipliers[OIL]                  = 0.0013;
+    tradeRepMultipliers[FUEL]                 = 0.0067;
+    tradeRepMultipliers[BITUMEN]              = 0.0083;
+    tradeRepMultipliers[CHEMICALS]            = 0.2;
+    tradeRepMultipliers[PLASTICS]             = 0.1;
+    tradeRepMultipliers[ECOMPONENTS]          = 0.3333;
+    tradeRepMultipliers[ELECTRONICS]          = 1;
+    tradeRepMultipliers[URANIUM]              = 0.0083;
+    tradeRepMultipliers[YELLOWCAKE]           = 0.2;
+    tradeRepMultipliers[UF6]                  = 0.5;
+    tradeRepMultipliers[NUCLEARFUEL]          = 10;
+    tradeRepMultipliers[NUCLEARFUELBURNED]    = 6.6667;
+    tradeRepMultipliers[FERTILISER]           = 0.004;
+    tradeRepMultipliers[FERTILISER_LIQUID]    = 0.01;
+    tradeRepMultipliers[SERVICE_MATERIAL]     = 1;
+    tradeRepMultipliers[WASTE_MIXED]          = 0.0067;
+    tradeRepMultipliers[WASTE_GRAVEL]         = 0.004;
+    tradeRepMultipliers[WASTE_STEEL]          = 0.01;
+    tradeRepMultipliers[WASTE_ALUMINIUM]      = 0.01;
+    tradeRepMultipliers[WASTE_PLASTIC]        = 0.004;
+    tradeRepMultipliers[WASTE_BIO]            = 0.002;
+    tradeRepMultipliers[WASTE_BURNABLE]       = 0.0067;
+    tradeRepMultipliers[WASTE_ASH]            = 0.01;
+    tradeRepMultipliers[WASTE_TOXIC]          = 0.1;
+    tradeRepMultipliers[WASTE_OTHER]          = 0.0067;
+    tradeRepMultipliers[WATER]                = 0.002;
+    tradeRepMultipliers[USAGEWATER]           = 0.004;
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+// NATO
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+    natoBuyDesire[RAWBAUXITE]           = 2;
+    natoBuyDesire[BAUXITE]              = 1;
+    natoBuyDesire[ALUMINA]              = 1;
+    natoBuyDesire[ALUMINIUM]            = 1;
+    natoBuyDesire[RAWCOAL]              = 3;
+    natoBuyDesire[COAL]                 = 3;
+    natoBuyDesire[BRICKS]               = 1;
+    natoBuyDesire[RAWGRAVEL]            = 2;
+    natoBuyDesire[GRAVEL]               = 1;
+    natoBuyDesire[PREFABS]              = 0;
+    natoBuyDesire[CEMENT]               = 1;
+    natoBuyDesire[CONCRETE]             = 0;
+    natoBuyDesire[ASPHALT]              = 0;
+    natoBuyDesire[RAWIRON]              = 2;
+    natoBuyDesire[IRON]                 = 3;
+    natoBuyDesire[STEEL]                = 5;
+    natoBuyDesire[MCOMPONENTS]          = 3;
+    natoBuyDesire[PLANTS]               = 4;
+    natoBuyDesire[LIVESTOCK]            = 4;
+    natoBuyDesire[MEAT]                 = 4;
+    natoBuyDesire[FOOD]                 = 3;
+    natoBuyDesire[ALCOHOL]              = 2;
+    natoBuyDesire[FABRIC]               = 3;
+    natoBuyDesire[CLOTHES]              = 2;
+    natoBuyDesire[WOOD]                 = 3;
+    natoBuyDesire[BOARDS]               = 4;
+    natoBuyDesire[EXPLOSIVES]           = 2;
+    natoBuyDesire[OIL]                  = 5;
+    natoBuyDesire[FUEL]                 = 4;
+    natoBuyDesire[BITUMEN]              = 4;
+    natoBuyDesire[CHEMICALS]            = 2;
+    natoBuyDesire[PLASTICS]             = 2;
+    natoBuyDesire[ECOMPONENTS]          = 2;
+    natoBuyDesire[ELECTRONICS]          = 1;
+    natoBuyDesire[URANIUM]              = 2;
+    natoBuyDesire[YELLOWCAKE]           = 2;
+    natoBuyDesire[UF6]                  = 2;
+    natoBuyDesire[NUCLEARFUEL]          = 3;
+    natoBuyDesire[NUCLEARFUELBURNED]    = 3;
+    natoBuyDesire[FERTILISER]           = 4;
+    natoBuyDesire[FERTILISER_LIQUID]    = 4;
+    natoBuyDesire[SERVICE_MATERIAL]     = 1;
+    natoBuyDesire[WASTE_MIXED]          = 0;
+    natoBuyDesire[WASTE_GRAVEL]         = 0;
+    natoBuyDesire[WASTE_STEEL]          = 4;
+    natoBuyDesire[WASTE_ALUMINIUM]      = 1;
+    natoBuyDesire[WASTE_PLASTIC]        = 0;
+    natoBuyDesire[WASTE_BIO]            = 1;
+    natoBuyDesire[WASTE_BURNABLE]       = 0;
+    natoBuyDesire[WASTE_ASH]            = 0;
+    natoBuyDesire[WASTE_TOXIC]          = 0;
+    natoBuyDesire[WASTE_OTHER]          = 0;
+    natoBuyDesire[WATER]                = 1;
+    natoBuyDesire[USAGEWATER]           = 0;
+    
+    natoSellDesire[RAWBAUXITE]          = 2;
+    natoSellDesire[BAUXITE]             = 3;
+    natoSellDesire[ALUMINA]             = 3;
+    natoSellDesire[ALUMINIUM]           = 2;
+    natoSellDesire[RAWCOAL]             = 2;
+    natoSellDesire[COAL]                = 2;
+    natoSellDesire[BRICKS]              = 2;
+    natoSellDesire[RAWGRAVEL]           = 2;
+    natoSellDesire[GRAVEL]              = 2;
+    natoSellDesire[PREFABS]             = 2;
+    natoSellDesire[CEMENT]              = 3;
+    natoSellDesire[CONCRETE]            = 1;
+    natoSellDesire[ASPHALT]             = 1;
+    natoSellDesire[RAWIRON]             = 2;
+    natoSellDesire[IRON]                = 2;
+    natoSellDesire[STEEL]               = 3;
+    natoSellDesire[MCOMPONENTS]         = 3;
+    natoSellDesire[PLANTS]              = 3;
+    natoSellDesire[LIVESTOCK]           = 2;
+    natoSellDesire[MEAT]                = 2;
+    natoSellDesire[FOOD]                = 4;
+    natoSellDesire[ALCOHOL]             = 3;
+    natoSellDesire[FABRIC]              = 3;
+    natoSellDesire[CLOTHES]             = 4;
+    natoSellDesire[WOOD]                = 2;
+    natoSellDesire[BOARDS]              = 2;
+    natoSellDesire[EXPLOSIVES]          = 2;
+    natoSellDesire[OIL]                 = 3;
+    natoSellDesire[FUEL]                = 3;
+    natoSellDesire[BITUMEN]             = 2;
+    natoSellDesire[CHEMICALS]           = 4;
+    natoSellDesire[PLASTICS]            = 3;
+    natoSellDesire[ECOMPONENTS]         = 4;
+    natoSellDesire[ELECTRONICS]         = 4;
+    natoSellDesire[URANIUM]             = 2;
+    natoSellDesire[YELLOWCAKE]          = 2;
+    natoSellDesire[UF6]                 = 0;
+    natoSellDesire[NUCLEARFUEL]         = 0;
+    natoSellDesire[NUCLEARFUELBURNED]   = 0;
+    natoSellDesire[FERTILISER]          = 3;
+    natoSellDesire[FERTILISER_LIQUID]   = 3;
+    natoSellDesire[SERVICE_MATERIAL]    = 1;
+    natoSellDesire[WASTE_MIXED]         = 4;
+    natoSellDesire[WASTE_GRAVEL]        = 4;
+    natoSellDesire[WASTE_STEEL]         = 3;
+    natoSellDesire[WASTE_ALUMINIUM]     = 3;
+    natoSellDesire[WASTE_PLASTIC]       = 4;
+    natoSellDesire[WASTE_BIO]           = 4;
+    natoSellDesire[WASTE_BURNABLE]      = 4;
+    natoSellDesire[WASTE_ASH]           = 4;
+    natoSellDesire[WASTE_TOXIC]         = 5;
+    natoSellDesire[WASTE_OTHER]         = 4;
+    natoSellDesire[WATER]               = 2;
+    natoSellDesire[USAGEWATER]          = 3;
+    
+    natoRepGainPer[RAWBAUXITE]          = 0;
+    natoRepGainPer[BAUXITE]             = 0;
+    natoRepGainPer[ALUMINA]             = 1;
+    natoRepGainPer[ALUMINIUM]           = 1;
+    natoRepGainPer[RAWCOAL]             = 0;
+    natoRepGainPer[COAL]                = 0;
+    natoRepGainPer[BRICKS]              = 0;
+    natoRepGainPer[RAWGRAVEL]           = 0;
+    natoRepGainPer[GRAVEL]              = 0;
+    natoRepGainPer[PREFABS]             = 0;
+    natoRepGainPer[CEMENT]              = 0;
+    natoRepGainPer[CONCRETE]            = 0;
+    natoRepGainPer[ASPHALT]             = 0;
+    natoRepGainPer[RAWIRON]             = 0;
+    natoRepGainPer[IRON]                = 0;
+    natoRepGainPer[STEEL]               = 2;
+    natoRepGainPer[MCOMPONENTS]         = 1;
+    natoRepGainPer[PLANTS]              = 0;
+    natoRepGainPer[LIVESTOCK]           = 0;
+    natoRepGainPer[MEAT]                = 0;
+    natoRepGainPer[FOOD]                = 0;
+    natoRepGainPer[ALCOHOL]             = 0;
+    natoRepGainPer[FABRIC]              = 0;
+    natoRepGainPer[CLOTHES]             = 0;
+    natoRepGainPer[WOOD]                = 0;
+    natoRepGainPer[BOARDS]              = 0;
+    natoRepGainPer[EXPLOSIVES]          = 1;
+    natoRepGainPer[OIL]                 = 1;
+    natoRepGainPer[FUEL]                = 2;
+    natoRepGainPer[BITUMEN]             = 0;
+    natoRepGainPer[CHEMICALS]           = 1;
+    natoRepGainPer[PLASTICS]            = 0;
+    natoRepGainPer[ECOMPONENTS]         = 1;
+    natoRepGainPer[ELECTRONICS]         = 2;
+    natoRepGainPer[URANIUM]             = 0;
+    natoRepGainPer[YELLOWCAKE]          = 1;
+    natoRepGainPer[UF6]                 = 2;
+    natoRepGainPer[NUCLEARFUEL]         = 8;
+    natoRepGainPer[NUCLEARFUELBURNED]   = 4;
+    natoRepGainPer[FERTILISER]          = 0;
+    natoRepGainPer[FERTILISER_LIQUID]   = 0;
+    natoRepGainPer[SERVICE_MATERIAL]    = 0;
+    natoRepGainPer[WASTE_MIXED]         = -3;
+    natoRepGainPer[WASTE_GRAVEL]        = -3;
+    natoRepGainPer[WASTE_STEEL]         = 0;
+    natoRepGainPer[WASTE_ALUMINIUM]     = 0;
+    natoRepGainPer[WASTE_PLASTIC]       = -5;
+    natoRepGainPer[WASTE_BIO]           = -2;
+    natoRepGainPer[WASTE_BURNABLE]      = -4;
+    natoRepGainPer[WASTE_ASH]           = -5;
+    natoRepGainPer[WASTE_TOXIC]         = -10;
+    natoRepGainPer[WASTE_OTHER]         = -3;
+    natoRepGainPer[WATER]               = 0;
+    natoRepGainPer[USAGEWATER]          = -3;
+
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+// USSR
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+    ussrBuyDesire[RAWBAUXITE]           = 5;
+    ussrBuyDesire[BAUXITE]              = 4;
+    ussrBuyDesire[ALUMINA]              = 3;
+    ussrBuyDesire[ALUMINIUM]            = 2;
+    ussrBuyDesire[RAWCOAL]              = 2;
+    ussrBuyDesire[COAL]                 = 2;
+    ussrBuyDesire[BRICKS]               = 3;
+    ussrBuyDesire[RAWGRAVEL]            = 2;
+    ussrBuyDesire[GRAVEL]               = 1;
+    ussrBuyDesire[PREFABS]              = 1;
+    ussrBuyDesire[CEMENT]               = 2;
+    ussrBuyDesire[CONCRETE]             = 1;
+    ussrBuyDesire[ASPHALT]              = 1;
+    ussrBuyDesire[RAWIRON]              = 3;
+    ussrBuyDesire[IRON]                 = 3;
+    ussrBuyDesire[STEEL]                = 2;
+    ussrBuyDesire[MCOMPONENTS]          = 4;
+    ussrBuyDesire[PLANTS]               = 4;
+    ussrBuyDesire[LIVESTOCK]            = 4;
+    ussrBuyDesire[MEAT]                 = 4;
+    ussrBuyDesire[FOOD]                 = 4;
+    ussrBuyDesire[ALCOHOL]              = 3;
+    ussrBuyDesire[FABRIC]               = 5;
+    ussrBuyDesire[CLOTHES]              = 3;
+    ussrBuyDesire[WOOD]                 = 0;
+    ussrBuyDesire[BOARDS]               = 1;
+    ussrBuyDesire[EXPLOSIVES]           = 4;
+    ussrBuyDesire[OIL]                  = 1;
+    ussrBuyDesire[FUEL]                 = 2;
+    ussrBuyDesire[BITUMEN]              = 2;
+    ussrBuyDesire[CHEMICALS]            = 3;
+    ussrBuyDesire[PLASTICS]             = 4;
+    ussrBuyDesire[ECOMPONENTS]          = 5;
+    ussrBuyDesire[ELECTRONICS]          = 5;
+    ussrBuyDesire[URANIUM]              = 4;
+    ussrBuyDesire[YELLOWCAKE]           = 3;
+    ussrBuyDesire[UF6]                  = 3;
+    ussrBuyDesire[NUCLEARFUEL]          = 3;
+    ussrBuyDesire[NUCLEARFUELBURNED]    = 2;
+    ussrBuyDesire[FERTILISER]           = 4;
+    ussrBuyDesire[FERTILISER_LIQUID]    = 4;
+    ussrBuyDesire[SERVICE_MATERIAL]     = 1;
+    ussrBuyDesire[WASTE_MIXED]          = 1;
+    ussrBuyDesire[WASTE_GRAVEL]         = 1;
+    ussrBuyDesire[WASTE_STEEL]          = 4;
+    ussrBuyDesire[WASTE_ALUMINIUM]      = 4;
+    ussrBuyDesire[WASTE_PLASTIC]        = 1;
+    ussrBuyDesire[WASTE_BIO]            = 1;
+    ussrBuyDesire[WASTE_BURNABLE]       = 1;
+    ussrBuyDesire[WASTE_ASH]            = 1;
+    ussrBuyDesire[WASTE_TOXIC]          = 0;
+    ussrBuyDesire[WASTE_OTHER]          = 1;
+    ussrBuyDesire[WATER]                = 1;
+    ussrBuyDesire[USAGEWATER]           = 0;
+    
+    ussrSellDesire[RAWBAUXITE]          = 1;
+    ussrSellDesire[BAUXITE]             = 1;
+    ussrSellDesire[ALUMINA]             = 2;
+    ussrSellDesire[ALUMINIUM]           = 3;
+    ussrSellDesire[RAWCOAL]             = 4;
+    ussrSellDesire[COAL]                = 4;
+    ussrSellDesire[BRICKS]              = 3;
+    ussrSellDesire[RAWGRAVEL]           = 3;
+    ussrSellDesire[GRAVEL]              = 3;
+    ussrSellDesire[PREFABS]             = 3;
+    ussrSellDesire[CEMENT]              = 3;
+    ussrSellDesire[CONCRETE]            = 2;
+    ussrSellDesire[ASPHALT]             = 2;
+    ussrSellDesire[RAWIRON]             = 3;
+    ussrSellDesire[IRON]                = 3;
+    ussrSellDesire[STEEL]               = 4;
+    ussrSellDesire[MCOMPONENTS]         = 2;
+    ussrSellDesire[PLANTS]              = 3;
+    ussrSellDesire[LIVESTOCK]           = 2;
+    ussrSellDesire[MEAT]                = 2;
+    ussrSellDesire[FOOD]                = 3;
+    ussrSellDesire[ALCOHOL]             = 3;
+    ussrSellDesire[FABRIC]              = 2;
+    ussrSellDesire[CLOTHES]             = 2;
+    ussrSellDesire[WOOD]                = 4;
+    ussrSellDesire[BOARDS]              = 4;
+    ussrSellDesire[EXPLOSIVES]          = 3;
+    ussrSellDesire[OIL]                 = 5;
+    ussrSellDesire[FUEL]                = 5;
+    ussrSellDesire[BITUMEN]             = 4;
+    ussrSellDesire[CHEMICALS]           = 2;
+    ussrSellDesire[PLASTICS]            = 3;
+    ussrSellDesire[ECOMPONENTS]         = 2;
+    ussrSellDesire[ELECTRONICS]         = 2;
+    ussrSellDesire[URANIUM]             = 3;
+    ussrSellDesire[YELLOWCAKE]          = 3;
+    ussrSellDesire[UF6]                 = 3;
+    ussrSellDesire[NUCLEARFUEL]         = 3;
+    ussrSellDesire[NUCLEARFUELBURNED]   = 3;
+    ussrSellDesire[FERTILISER]          = 2;
+    ussrSellDesire[FERTILISER_LIQUID]   = 2;
+    ussrSellDesire[SERVICE_MATERIAL]    = 1;
+    ussrSellDesire[WASTE_MIXED]         = 4;
+    ussrSellDesire[WASTE_GRAVEL]        = 4;
+    ussrSellDesire[WASTE_STEEL]         = 3;
+    ussrSellDesire[WASTE_ALUMINIUM]     = 2;
+    ussrSellDesire[WASTE_PLASTIC]       = 4;
+    ussrSellDesire[WASTE_BIO]           = 3;
+    ussrSellDesire[WASTE_BURNABLE]      = 4;
+    ussrSellDesire[WASTE_ASH]           = 4;
+    ussrSellDesire[WASTE_TOXIC]         = 5;
+    ussrSellDesire[WASTE_OTHER]         = 4;
+    ussrSellDesire[WATER]               = 4;
+    ussrSellDesire[USAGEWATER]          = 4;
+    
+    ussrRepGainPer[RAWBAUXITE]          = 0;
+    ussrRepGainPer[BAUXITE]             = 0;
+    ussrRepGainPer[ALUMINA]             = 0;
+    ussrRepGainPer[ALUMINIUM]           = 0;
+    ussrRepGainPer[RAWCOAL]             = 0;
+    ussrRepGainPer[COAL]                = 0;
+    ussrRepGainPer[BRICKS]              = 0;
+    ussrRepGainPer[RAWGRAVEL]           = 0;
+    ussrRepGainPer[GRAVEL]              = 0;
+    ussrRepGainPer[PREFABS]             = 0;
+    ussrRepGainPer[CEMENT]              = 0;
+    ussrRepGainPer[CONCRETE]            = 0;
+    ussrRepGainPer[ASPHALT]             = 0;
+    ussrRepGainPer[RAWIRON]             = 0;
+    ussrRepGainPer[IRON]                = 0;
+    ussrRepGainPer[STEEL]               = 0;
+    ussrRepGainPer[MCOMPONENTS]         = 2;
+    ussrRepGainPer[PLANTS]              = 0;
+    ussrRepGainPer[LIVESTOCK]           = 0;
+    ussrRepGainPer[MEAT]                = 0;
+    ussrRepGainPer[FOOD]                = 0;
+    ussrRepGainPer[ALCOHOL]             = 0;
+    ussrRepGainPer[FABRIC]              = 0;
+    ussrRepGainPer[CLOTHES]             = 0;
+    ussrRepGainPer[WOOD]                = 0;
+    ussrRepGainPer[BOARDS]              = 0;
+    ussrRepGainPer[EXPLOSIVES]          = 3;
+    ussrRepGainPer[OIL]                 = 0;
+    ussrRepGainPer[FUEL]                = 0;
+    ussrRepGainPer[BITUMEN]             = 0;
+    ussrRepGainPer[CHEMICALS]           = 2;
+    ussrRepGainPer[PLASTICS]            = 1;
+    ussrRepGainPer[ECOMPONENTS]         = 3;
+    ussrRepGainPer[ELECTRONICS]         = 5;
+    ussrRepGainPer[URANIUM]             = 1;
+    ussrRepGainPer[YELLOWCAKE]          = 1;
+    ussrRepGainPer[UF6]                 = 3;
+    ussrRepGainPer[NUCLEARFUEL]         = 10;
+    ussrRepGainPer[NUCLEARFUELBURNED]   = 3;
+    ussrRepGainPer[FERTILISER]          = 0;
+    ussrRepGainPer[FERTILISER_LIQUID]   = 0;
+    ussrRepGainPer[SERVICE_MATERIAL]    = 0;
+    ussrRepGainPer[WASTE_MIXED]         = -1;
+    ussrRepGainPer[WASTE_GRAVEL]        = -1;
+    ussrRepGainPer[WASTE_STEEL]         = 0;
+    ussrRepGainPer[WASTE_ALUMINIUM]     = 0;
+    ussrRepGainPer[WASTE_PLASTIC]       = -3;
+    ussrRepGainPer[WASTE_BIO]           = -1;
+    ussrRepGainPer[WASTE_BURNABLE]      = -2;
+    ussrRepGainPer[WASTE_ASH]           = -3;
+    ussrRepGainPer[WASTE_TOXIC]         = -10;
+    ussrRepGainPer[WASTE_OTHER]         = -1;
+    ussrRepGainPer[WATER]               = 0;
+    ussrRepGainPer[USAGEWATER]          = -1;
+
+    for (i = 0, i < 53, i = i + 1)
+    {
+        natoBuyMultipliers[i] = 1;
+        natoSellMultipliers[i] = 1;
+        ussrBuyMultipliers[i] = 1;
+        ussrSellMultipliers[i] = 1;
+    }
+
+    returnVoid();
+}

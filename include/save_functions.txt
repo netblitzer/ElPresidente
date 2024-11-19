@@ -244,7 +244,7 @@ defineFunction(ProcessSaveData, void)
     strcat(temp_c1, processSaveDataTemp2);
     strcat(temp_c1, NEWLINE);
     strcat(temp_c1, processSaveDataTemp3);
-    Scenario_WindowWithImageTopLeft("test2", temp_c1, "", 3);
+    //Scenario_WindowWithImageTopLeft("test2", temp_c1, "", 3);
 
     returnVoid();
 }
