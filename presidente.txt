@@ -93,7 +93,7 @@ defineFunction(main, void)
                 natoRep = CalculatePassiveRepChange(natoRep);
                 ussrRep = CalculatePassiveRepChange(ussrRep);
 
-                //CalculateTrade();
+                CalculateTrade();
             }
 
             Objective_Exist("reputation", objectiveExists);

@@ -7,8 +7,242 @@ defineFunction(InitTrade, void)
     returnVoid();
 }
 
+defineFunction(UpdateTradeValues, void)
+{
+    if (natoRep < 350)
+    {
+        temp_f1 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
+    }
+    else()
+    {
+        temp_f1 = 1;
+    }
+
+    if (ussrRep < 350)
+    {
+        temp_f2 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
+    }
+    else()
+    {
+        temp_f2 = 1;
+    }
+
+    for (i = 0, i < 53, i = i + 1)
+    {
+        if (natoBuyDesire[i] ? 0)
+        {
+            temp_f3 = 10;
+        }
+        elseif (natoBuyDesire[i] ? 1)
+        {
+            temp_f3 = 3.5;
+        }
+        elseif (natoBuyDesire[i] ? 2)
+        {
+            temp_f3 = 1.5;
+        }
+        elseif (natoBuyDesire[i] ? 3)
+        {
+            temp_f3 = 1;
+        }
+        elseif (natoBuyDesire[i] ? 4)
+        {
+            temp_f3 = 0.85;
+        }
+        elseif (natoBuyDesire[i] ? 5)
+        {
+            temp_f3 = 0.6;
+        }
+        else()
+        {
+            temp_f3 = 1;
+        }
+        if (natoSellDesire[i] ? 0)
+        {
+            temp_f4 = 10;
+        }
+        elseif (natoSellDesire[i] ? 1)
+        {
+            temp_f4 = 3.5;
+        }
+        elseif (natoSellDesire[i] ? 2)
+        {
+            temp_f4 = 1.5;
+        }
+        elseif (natoSellDesire[i] ? 3)
+        {
+            temp_f4 = 1;
+        }
+        elseif (natoSellDesire[i] ? 4)
+        {
+            temp_f4 = 0.85;
+        }
+        elseif (natoSellDesire[i] ? 5)
+        {
+            temp_f4 = 0.6;
+        }
+        else()
+        {
+            temp_f4 = 1;
+        }
+
+        natoBuyMultipliers[i] = temp_f1 * temp_f3;
+        natoSellMultipliers[i] = (1.00 / temp_f1) * temp_f4;
+        
+        if (ussrBuyDesire[i] ? 0)
+        {
+            temp_f3 = 10;
+        }
+        elseif (ussrBuyDesire[i] ? 1)
+        {
+            temp_f3 = 3.5;
+        }
+        elseif (ussrBuyDesire[i] ? 2)
+        {
+            temp_f3 = 1.5;
+        }
+        elseif (ussrBuyDesire[i] ? 3)
+        {
+            temp_f3 = 1;
+        }
+        elseif (ussrBuyDesire[i] ? 4)
+        {
+            temp_f3 = 0.85;
+        }
+        elseif (ussrBuyDesire[i] ? 5)
+        {
+            temp_f3 = 0.6;
+        }
+        else()
+        {
+            temp_f3 = 1;
+        }
+        if (ussrSellDesire[i] ? 0)
+        {
+            temp_f4 = 10;
+        }
+        elseif (ussrSellDesire[i] ? 1)
+        {
+            temp_f4 = 3.5;
+        }
+        elseif (ussrSellDesire[i] ? 2)
+        {
+            temp_f4 = 1.5;
+        }
+        elseif (ussrSellDesire[i] ? 3)
+        {
+            temp_f4 = 1;
+        }
+        elseif (ussrSellDesire[i] ? 4)
+        {
+            temp_f4 = 0.85;
+        }
+        elseif (ussrSellDesire[i] ? 5)
+        {
+            temp_f4 = 0.6;
+        }
+        else()
+        {
+            temp_f4 = 1;
+        }
+
+        ussrBuyMultipliers[i] = temp_f2 * temp_f3;
+        ussrSellMultipliers[i] = (1.00 / temp_f2) * temp_f4;
+    }
+
+    returnVoid();
+}
+
+defineFunction(UpdateTradeFactors, void)
+{
+    strcpy(temp_c1, "update: ");
+    strcat(temp_c1, NEWLINE);
+    
+    if (natoRep < 350)
+    {
+        temp_f1 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
+    }
+    else()
+    {
+        temp_f1 = 1;
+    }
+
+    if (ussrRep < 350)
+    {
+        temp_f2 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
+    }
+    else()
+    {
+        temp_f2 = 1;
+    }
+    
+    strcat(temp_c1, "nato factor: ");
+    strcat(temp_c1, temp_f1);
+    strcat(temp_c1, " ussr factor: ");
+    strcat(temp_c1, temp_f2);
+    strcat(temp_c1, NEWLINE);
+    for (i = 0, i < 4, i = i + 1)
+    {
+        temp_f1 = natoSellMultipliers[i];
+        temp_f2 = natoBuyMultipliers[i];
+        temp_f3 = ussrSellMultipliers[i];
+        temp_f4 = ussrBuyMultipliers[i];
+
+        if (i ? 0)
+        {
+            temp_s1 = "rawbauxite";
+        }
+        elseif (i ? 1)
+        {
+            temp_s1 = "bauxite";
+        }
+        elseif (i ? 2)
+        {
+            temp_s1 = "alumina";
+        }
+        elseif (i ? 3)
+        {
+            temp_s1 = "aluminium";
+        }
+
+        Resources_SetCostUSD_SellFactor(temp_s1, temp_f2);
+        Resources_SetCostUSD_PurchaseFactor(temp_s1, temp_f1);
+        Resources_SetCostRUB_SellFactor(temp_s1, temp_f4);
+        Resources_SetCostRUB_PurchaseFactor(temp_s1, temp_f3);
+
+        strcat(temp_c1, "resource: ");
+        strcat(temp_c1, temp_s1);
+        strcat(temp_c1, NEWLINE);
+        strcat(temp_c1, "natoSell: ");
+        strcat(temp_c1, temp_f1);
+        strcat(temp_c1, " natoBuy: ");
+        strcat(temp_c1, temp_f2);
+        strcat(temp_c1, NEWLINE);
+        strcat(temp_c1, "ussrSell: ");
+        strcat(temp_c1, temp_f3);
+        strcat(temp_c1, " ussrBuy: ");
+        strcat(temp_c1, temp_f4);
+        strcat(temp_c1, NEWLINE);
+        strcat(temp_c1, NEWLINE);
+    }
+
+    Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    returnVoid();
+}
+
 defineFunction(CalculateTrade, void)
 {
+    if (updateFlipFlop ? 1)
+    {
+        UpdateTradeValues();
+        updateFlipFlop = 0;
+    }
+    else()
+    {
+        UpdateTradeFactors();
+        updateFlipFlop = 1;
+    }
+
     temp_i1 = lastSaveLongDay % 365;
     temp_i2 = lastSaveLongDay / 365;
     temp_i3 = saveLongDay % 365;
@@ -23,27 +257,12 @@ defineFunction(CalculateTrade, void)
     natoResourcesOut = checkStats.ExportTonsUSD;
     ussrResourcesOut = checkStats.ExportTonsRUB;
 
-    strcpy(temp_c1, "day parse: ");
-    strcat(temp_c1, temp_i1);
-    strcat(temp_c1, " year parse: ");
-    strcat(temp_c1, temp_i2);
-    strcat(temp_c1, NEWLINE);
-    strcat(temp_c1, "day parse: ");
-    strcat(temp_c1, temp_i3);
-    strcat(temp_c1, " year parse: ");
-    strcat(temp_c1, temp_i4);
-    strcat(temp_c1, NEWLINE);
-    strcat(temp_c1, " steel: ");
-    temp_f1 = natoResourcesOut.steel;
-    strcat(temp_c1, temp_f1);
-    strcat(temp_c1, NEWLINE);
-
     if (natoResourcesOut.steel > 0)
     {
         natoRep = natoRep + (natoResourcesOut.steel * REP_TRADE_PER_FAV_TON);
     }
 
-    Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    //Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
     
     returnVoid();
 }

@@ -17,7 +17,8 @@ defineFunction(InitSettings, void)
     //
     // ---- Reputation Effects ----
     // -- Trading --
-    // At below 100, the faction will no longer trade with you at all.
+    // At below 50, the faction will no longer trade with you at all.
+    // At below 100, the faction will only trade necessities (food, fuel) with you.
     // At below 200, the faction will not trade medium value resources with you.
     //  USSR: Fuel, Aluminum
     //  NATO: Oil, Plastic, Mechanical Components

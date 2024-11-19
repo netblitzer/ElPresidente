@@ -13,6 +13,8 @@ defineArray(int[64], ussrSellDesire);           // USSR: Static array of the des
 defineArray(float[64], natoRepGainPer);         // NATO: Static array of the amount of reputation gained per "rep ton" of each resource
 defineArray(float[64], ussrRepGainPer);         // USSR: Static array of the amount of reputation gained per "rep ton" of each resource
 
+defineVariable(int, updateFlipFlop);
+
 defineVariable(int, RAWBAUXITE);
 defineVariable(int, BAUXITE);
 defineVariable(int, ALUMINA);
