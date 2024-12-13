@@ -6,6 +6,13 @@ include("include/save_functions.txt");
 include("include/dialogue/dialogues.txt");
 include("include/trade.txt");
 
+defineFunction(UpdateStateValues, void)
+{
+    Date_GetCurrentDate_DMY(day, month, year);
+    saveDayLong = GetDayLong();
+    returnVoid();
+}
+
 defineFunction(CalculatePassiveRepChange, float, float:_repToChange)
 {
     temp_f1 = _repToChange;
@@ -28,6 +35,7 @@ defineFunction(main, void)
 
     // Intitialize variables
     NEWLINE = 10;
+    lastTradeUpdateDay = 0;
     // Defaults before loading the saves
     InitializeDefaultData();
     
@@ -74,9 +82,9 @@ defineFunction(main, void)
         if (time > timeLast)
         {
             Script_EnterCriticalSection();
-            saveLongDay = GetLongDay();
+            UpdateStateValues();
 
-            if ((saveLongDay - lastSaveLongDay > 2 | lastSaveLongDay - saveLongDay > 2) & justLoaded ? 0)
+            if ((saveDayLong - lastSaveDayLong > 2 | lastSaveDayLong - saveDayLong > 2) & justLoaded ? 0)
             {
                 // The player used a timeskip!
                 // CancelContract(contract1); etc...
@@ -87,12 +95,16 @@ defineFunction(main, void)
             }
 
             // Process game state
-            if (saveLongDay > lastSaveLongDay)
+            //if (saveDayLong > lastSaveDayLong)
+            if (day ? 1 | !(lastTradeUpdateDay ? 0))
             {
-                // Move reputations towards the center over time
-                natoRep = CalculatePassiveRepChange(natoRep);
-                ussrRep = CalculatePassiveRepChange(ussrRep);
-
+                if (day ? 1)
+                {
+                    // Move reputations towards the center over time
+                    natoRep = CalculatePassiveRepChange(natoRep);
+                    ussrRep = CalculatePassiveRepChange(ussrRep);
+                }
+                
                 CalculateTrade();
             }
 
@@ -113,9 +125,10 @@ defineFunction(main, void)
 
             timeLast = time;
             dayLast = day;
-            // monthLast = month;
+            dayLongLast = dayLong;
+            lastSaveDayLong = saveDayLong;
+            monthLast = month;
             yearLast =  year;
-            lastSaveLongDay = saveLongDay;
 
             UpdateSaveData();
 

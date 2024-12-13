@@ -226,40 +226,54 @@ defineFunction(UpdateTradeFactors, void)
         strcat(temp_c1, NEWLINE);
     }
 
-    Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    //Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
     returnVoid();
 }
 
 defineFunction(CalculateTrade, void)
 {
-    if (updateFlipFlop ? 1)
+    if (day ? 1 & lastTradeUpdateDay ? 0)
     {
-        UpdateTradeValues();
-        updateFlipFlop = 0;
+        lastTradeUpdateDay = 1;
+        
+        temp_i1 = lastSaveDayLong % 365;
+        temp_i2 = lastSaveDayLong / 365;
+        temp_i3 = saveDayLong % 365;
+        temp_i4 = saveDayLong / 365;
+        checkStats.GetFromDateToDate_D365Y(temp_i1, temp_i2, temp_i3, temp_i4);
+
+        Building_GetNumberOfBuildings(buildingCount);
+        Vehicle_GetNumberOfVehicles(vehicleCount);
+
+        natoResourcesIn = checkStats.ImportTonsUSD;
+        ussrResourcesIn = checkStats.ImportTonsRUB;
+        natoResourcesOut = checkStats.ExportTonsUSD;
+        ussrResourcesOut = checkStats.ExportTonsRUB;
+
+        if (natoResourcesOut.steel > 0)
+        {
+            natoRep = natoRep + (natoResourcesOut.steel * REP_TRADE_PER_FAV_TON);
+        }
+        strcpy(temp_c1, "Nato steel exported: ");
+        temp_f1 = natoResourcesOut.steel;
+        strcat(temp_c1, temp_f1);
+
+        if (ussrResourcesOut.steel > 0)
+        {
+            ussrRep = ussrRep + (ussrResourcesOut.steel * REP_TRADE_PER_FAV_TON);
+        }
+        
+        Scenario_WindowWithImageTopLeft("test trade", temp_c1, "", 3);
     }
-    else()
+    elseif (day ? 2 & lastTradeUpdateDay ? 1)
     {
-        UpdateTradeFactors();
-        updateFlipFlop = 1;
+        //UpdateTradeFactors();
+        lastTradeUpdateDay = 2;
     }
-
-    temp_i1 = lastSaveLongDay % 365;
-    temp_i2 = lastSaveLongDay / 365;
-    temp_i3 = saveLongDay % 365;
-    temp_i4 = saveLongDay / 365;
-    checkStats.GetFromDateToDate_D365Y(temp_i1, temp_i2, temp_i3, temp_i4);
-
-    Building_GetNumberOfBuildings(buildingCount);
-    Vehicle_GetNumberOfVehicles(vehicleCount);
-
-    natoResourcesIn = checkStats.ImportTonsUSD;
-    ussrResourcesIn = checkStats.ImportTonsRUB;
-    natoResourcesOut = checkStats.ExportTonsUSD;
-    ussrResourcesOut = checkStats.ExportTonsRUB;
-
-    if (natoResourcesOut.steel > 0)
+    elseif (day ? 3 & lastTradeUpdateDay ? 2)
     {
-        natoRep = natoRep + (natoResourcesOut.steel * REP_TRADE_PER_FAV_TON);
+        //UpdateTradeValues();
+        lastTradeUpdateDay = 3;
     }
 
     //Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);

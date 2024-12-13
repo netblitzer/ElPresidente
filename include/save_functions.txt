@@ -1,9 +1,10 @@
 // Save data is stored in tags on the overseas customs houses
-// An example save: u_603.29_0715954|02_0715600_0900_000|
+// An example save: 603.29_0715954_0715934_0|02_0715600_0900_000|
 // Split up: 
-//  u       -> ussr
 //  603.29  -> rep with faction
 //  0715954 -> day of save from 1/1/0000
+//  0715934 -> last day trade was checked 1/1/0000
+//  0       -> day of the month the trade was last checked, 0 if trade wasn't being checked
 //  |       -> split between base data and missions
 //  02      -> contract type 2
 //  0715600 -> contract start date
@@ -185,22 +186,57 @@ defineFunction(ConvertFloatToCharLength, void, float:float_to_convert_to_length,
 
 defineFunction(CreateSaveData, void)
 {
-    saveLongDay = GetLongDay();
-    strcpy(natoSaveTag, "n_");
-    strcpy(ussrSaveTag, "u_");
+    Date_GetCurrentDate_DMY(day, month, year);
+    saveDayLong = GetDayLong();
 
     ConvertFloatToCharLength(natoRep, 6);
     strcat(natoSaveTag, convertedFloatToCharLength);
     strcat(natoSaveTag, "_");
-    strcat(natoSaveTag, saveLongDay);
+    strcat(natoSaveTag, saveDayLong);
 
     ConvertFloatToCharLength(ussrRep, 6);
     strcat(ussrSaveTag, convertedFloatToCharLength);
     strcat(ussrSaveTag, "_");
-    strcat(ussrSaveTag, saveLongDay);
+    strcat(ussrSaveTag, saveDayLong);
+
+    // If we're just creating new save data, assume last check was the start of the year
+    temp_i4 = year * 365;
+    ConvertFloatToCharLength(temp_i4, 6);
+    strcat(natoSaveTag, "_");
+    strcat(natoSaveTag, convertedFloatToCharLength);
+    strcat(ussrSaveTag, "_");
+    strcat(ussrSaveTag, convertedFloatToCharLength);
+    
+    strcat(natoSaveTag, "_0");
+    strcat(ussrSaveTag, "_0");
 
     Building_SetTagChar(natoSaveTag, natoCustom);
     Building_SetTagChar(ussrSaveTag, ussrCustom);
+
+    strcat(temp_c1, saveDayLong);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, temp_i4);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, year);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "NATO: ");
+    strcat(temp_c1, natoSaveTag);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, natoCustom);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "USSR: ");
+    strcat(temp_c1, ussrSaveTag);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, ussrCustom);
+
+    Building_GetCharTag(0, temp_c3);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, temp_c3);
+    Building_GetCharTag(1, temp_c3);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, temp_c3);
+
+    //Scenario_WindowWithImageTopLeft("create save data", temp_c1, "", 3);
 
     returnVoid();
 }
@@ -215,12 +251,15 @@ defineFunction(ProcessSaveData, void)
     strcpy(processSaveDataTemp1, "");
     strcpy(processSaveDataTemp2, "");
 
+    strcat(temp_c1, "NATO: ");
     strcat(temp_c1, natoSaveTag);
-    strcat(temp_c1, " ");
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "USSR: ");
     strcat(temp_c1, ussrSaveTag);
     strcat(temp_c1, NEWLINE);
 
-    for (i = 2, i < 8, i = i + 1)
+    // Get player rep with factions
+    for (i = 0, i < 6, i = i + 1)
     {
         processSaveDataTemp = natoSaveTag[i];
         strcat(processSaveDataTemp1, processSaveDataTemp);
@@ -230,21 +269,39 @@ defineFunction(ProcessSaveData, void)
     atof(processSaveDataTemp1, natoRep);
     atof(processSaveDataTemp2, ussrRep);
 
-    strcpy(processSaveDataTemp3, "");
-
-    for (i = 9, i < 16, i = i + 1)
+    // Get last save date
+    strcpy(processSaveDataTemp1, "");
+    for (i = 7, i < 14, i = i + 1)
     {
         processSaveDataTemp = natoSaveTag[i];
-        strcat(processSaveDataTemp3, processSaveDataTemp);
+        strcat(processSaveDataTemp1, processSaveDataTemp);
     }
-    atoi(processSaveDataTemp3, lastSaveLongDay);
+    atoi(processSaveDataTemp1, lastSaveDayLong);
 
-    strcat(temp_c1, processSaveDataTemp1);
-    strcat(temp_c1, NEWLINE);
-    strcat(temp_c1, processSaveDataTemp2);
-    strcat(temp_c1, NEWLINE);
-    strcat(temp_c1, processSaveDataTemp3);
-    //Scenario_WindowWithImageTopLeft("test2", temp_c1, "", 3);
+    // Get last trade save day
+    strcpy(processSaveDataTemp1, "");
+    for (i = 14, i < 21, i = i + 1)
+    {
+        processSaveDataTemp = natoSaveTag[i];
+        strcat(processSaveDataTemp1, processSaveDataTemp);
+    }
+    atoi(processSaveDataTemp1, lastTradeSaveDayLong);
+
+    // Get last trade check day
+    strcpy(processSaveDataTemp1, "");
+    for (i = 22, i < 23, i = i + 1)
+    {
+        processSaveDataTemp = natoSaveTag[i];
+        strcat(processSaveDataTemp1, processSaveDataTemp);
+    }
+    atoi(processSaveDataTemp1, lastTradeUpdateDay);
+
+    strcat(temp_c1, lastSaveDayLong);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, lastTradeSaveDayLong);
+    strcat(temp_c1, " ");
+    strcat(temp_c1, lastTradeUpdateDay);
+    //Scenario_WindowWithImageTopLeft("process save data", temp_c1, "", 3);
 
     returnVoid();
 }
@@ -323,18 +380,23 @@ defineFunction(ReadSaveData, void)
 
 defineFunction(UpdateSaveData, void)
 {
-    strcpy(natoSaveTag, "n_");
-    strcpy(ussrSaveTag, "u_");
-
     ConvertFloatToCharLength(natoRep, 6);
     strcat(natoSaveTag, convertedFloatToCharLength);
     strcat(natoSaveTag, "_");
-    strcat(natoSaveTag, saveLongDay);
+    strcat(natoSaveTag, saveDayLong);
+    strcat(natoSaveTag, "_");
+    strcat(natoSaveTag, lastTradeSaveDayLong);
+    strcat(natoSaveTag, "_");
+    strcat(natoSaveTag, lastTradeUpdateDay);
 
     ConvertFloatToCharLength(ussrRep, 6);
     strcat(ussrSaveTag, convertedFloatToCharLength);
     strcat(ussrSaveTag, "_");
-    strcat(ussrSaveTag, saveLongDay);
+    strcat(ussrSaveTag, saveDayLong);
+    strcat(ussrSaveTag, "_");
+    strcat(ussrSaveTag, lastTradeSaveDayLong);
+    strcat(ussrSaveTag, "_");
+    strcat(ussrSaveTag, lastTradeUpdateDay);
 
     Building_SetTagChar(natoSaveTag, natoCustom);
     Building_SetTagChar(ussrSaveTag, ussrCustom);

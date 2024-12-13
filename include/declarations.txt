@@ -29,9 +29,11 @@ defineVariable(char, NEWLINE);
 
 defineVariable(int, random);
 defineVariable(int, day);
+defineVariable(int, dayLong);
 defineVariable(int, month);
 defineVariable(int, year);
 defineVariable(int, dayLast);
+defineVariable(int, dayLongLast);
 defineVariable(int, monthLast);
 defineVariable(int, yearLast);
 defineVariable(int, houseType);
@@ -56,8 +58,10 @@ defineArray(char[128], ussrSaveTag);
 defineVariable(int, tutorialState);
 defineVariable(float, natoRep);
 defineVariable(float, ussrRep);
-defineVariable(int, saveLongDay);
-defineVariable(int, lastSaveLongDay);
+defineVariable(int, saveDayLong);
+defineVariable(int, lastSaveDayLong);
+defineVariable(int, lastTradeSaveDayLong);
+defineVariable(int, lastTradeUpdateDay);
 
 defineVariable(int, bottomNeutralThreshold);
 defineVariable(int, topNeutralThreshold);
