@@ -101,11 +101,14 @@ defineFunction(main, void)
                 if (day ? 1)
                 {
                     // Move reputations towards the center over time
-                    natoRep = CalculatePassiveRepChange(natoRep);
+                    //natoRep = CalculatePassiveRepChange(natoRep);
                     ussrRep = CalculatePassiveRepChange(ussrRep);
                 }
                 
-                CalculateTrade();
+                if (!(day ? lastTradeUpdateDay))
+                {
+                    CalculateTrade();
+                }
             }
 
             Objective_Exist("reputation", objectiveExists);

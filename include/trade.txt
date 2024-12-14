@@ -230,40 +230,512 @@ defineFunction(UpdateTradeFactors, void)
     returnVoid();
 }
 
+defineVariable(float, natoRepGained);
+defineVariable(float, ussrRepGained);
+defineFunction(ProcessTradeResources, void)
+{
+    temp_i1 = lastTradeSaveDayLong % 365;
+    temp_i2 = lastTradeSaveDayLong / 365;
+    temp_i3 = saveDayLong % 365;
+    temp_i4 = saveDayLong / 365;
+    checkStats.GetFromDateToDate_D365Y(temp_i1, temp_i2, temp_i3, temp_i4);
+
+    natoRepGained = 0;
+    ussrRepGained = 0;
+
+    Building_GetNumberOfBuildings(buildingCount);
+    Vehicle_GetNumberOfVehicles(vehicleCount);
+
+    natoResourcesIn = checkStats.ImportTonsUSD;
+    ussrResourcesIn = checkStats.ImportTonsRUB;
+    natoResourcesOut = checkStats.ExportTonsUSD;
+    ussrResourcesOut = checkStats.ExportTonsRUB;
+
+    strcat(temp_c1, "Nato steel exported: ");
+    temp_f1 = natoResourcesOut.steel;
+    strcat(temp_c1, temp_f1);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "Ussr steel exported: ");
+    temp_f1 = ussrResourcesOut.steel;
+    strcat(temp_c1, temp_f1);
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+// NATO
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+    if (natoResourcesOut.rawbauxite > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.rawbauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWBAUXITE] * natoRepGainPer[RAWBAUXITE]);
+    }
+    if (natoResourcesOut.bauxite > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.bauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BAUXITE] * natoRepGainPer[BAUXITE]);
+    }
+    if (natoResourcesOut.alumina > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.rawbauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALUMINA] * natoRepGainPer[ALUMINA]);
+    }
+    if (natoResourcesOut.aluminium > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.bauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALUMINIUM] * natoRepGainPer[ALUMINIUM]);
+    }
+    if (natoResourcesOut.rawcoal > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.rawcoal * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWCOAL] * natoRepGainPer[RAWCOAL]);
+    }
+    if (natoResourcesOut.coal > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.coal * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[COAL] * natoRepGainPer[COAL]);
+    }
+    if (natoResourcesOut.bricks > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.bricks * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BRICKS] * natoRepGainPer[BRICKS]);
+    }
+    if (natoResourcesOut.rawgravel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.rawgravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWGRAVEL] * natoRepGainPer[RAWGRAVEL]);
+    }
+    if (natoResourcesOut.gravel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.gravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[GRAVEL] * natoRepGainPer[GRAVEL]);
+    }
+    if (natoResourcesOut.prefabpanels > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.prefabpanels * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PREFABS] * natoRepGainPer[PREFABS]);
+    }
+    if (natoResourcesOut.cement > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.cement * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CEMENT] * natoRepGainPer[CEMENT]);
+    }
+    if (natoResourcesOut.concrete > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.concrete * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CONCRETE] * natoRepGainPer[CONCRETE]);
+    }
+    if (natoResourcesOut.asphalt > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.asphalt * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ASPHALT] * natoRepGainPer[ASPHALT]);
+    }
+    if (natoResourcesOut.rawiron > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.rawiron * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWIRON] * natoRepGainPer[RAWIRON]);
+    }
+    if (natoResourcesOut.iron > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.iron * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[IRON] * natoRepGainPer[IRON]);
+    }
+    if (natoResourcesOut.steel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.steel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[STEEL] * natoRepGainPer[STEEL]);
+    }
+    if (natoResourcesOut.mcomponents > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.mcomponents * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[MCOMPONENTS] * natoRepGainPer[MCOMPONENTS]);
+    }
+    if (natoResourcesOut.plants > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.plants * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PLANTS] * natoRepGainPer[PLANTS]);
+    }
+    if (natoResourcesOut.livestock > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.livestock * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[LIVESTOCK] * natoRepGainPer[LIVESTOCK]);
+    }
+    if (natoResourcesOut.meat > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.meat * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[MEAT] * natoRepGainPer[MEAT]);
+    }
+    if (natoResourcesOut.food > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.food * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FOOD] * natoRepGainPer[FOOD]);
+    }
+    if (natoResourcesOut.alcohol > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.alcohol * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALCOHOL] * natoRepGainPer[ALCOHOL]);
+    }
+    if (natoResourcesOut.fabric > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.fabric * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FABRIC] * natoRepGainPer[FABRIC]);
+    }
+    if (natoResourcesOut.clothes > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.clothes * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CLOTHES] * natoRepGainPer[CLOTHES]);
+    }
+    if (natoResourcesOut.wood > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.wood * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WOOD] * natoRepGainPer[WOOD]);
+    }
+    if (natoResourcesOut.boards > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.boards * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BOARDS] * natoRepGainPer[BOARDS]);
+    }
+    if (natoResourcesOut.explosives > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.explosives * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[EXPLOSIVES] * natoRepGainPer[EXPLOSIVES]);
+    }
+    if (natoResourcesOut.oil > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.oil * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[OIL] * natoRepGainPer[OIL]);
+    }
+    if (natoResourcesOut.fuel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.fuel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FUEL] * natoRepGainPer[FUEL]);
+    }
+    if (natoResourcesOut.bitumen > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.bitumen * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BITUMEN] * natoRepGainPer[BITUMEN]);
+    }
+    if (natoResourcesOut.chemicals > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.chemicals * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CHEMICALS] * natoRepGainPer[CHEMICALS]);
+    }
+    if (natoResourcesOut.plastics > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.plastics * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PLASTICS] * natoRepGainPer[PLASTICS]);
+    }    
+    if (natoResourcesOut.ecomponents > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.ecomponents * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ECOMPONENTS] * natoRepGainPer[ECOMPONENTS]);
+    }
+    if (natoResourcesOut.eletronics > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.eletronics * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ELECTRONICS] * natoRepGainPer[ELECTRONICS]);
+    }
+    if (natoResourcesOut.uranium > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.uranium * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[URANIUM] * natoRepGainPer[URANIUM]);
+    }
+    if (natoResourcesOut.yellowcake > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.yellowcake * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[YELLOWCAKE] * natoRepGainPer[YELLOWCAKE]);
+    }
+    if (natoResourcesOut.uf6 > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.uf6 * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[UF6] * natoRepGainPer[UF6]);
+    }
+    if (natoResourcesOut.nuclearfuel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.nuclearfuel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[NUCLEARFUEL] * natoRepGainPer[NUCLEARFUEL]);
+    }
+    if (natoResourcesOut.nuclearfuelburned > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.nuclearfuelburned * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[NUCLEARFUELBURNED] * natoRepGainPer[NUCLEARFUELBURNED]);
+    }
+    if (natoResourcesOut.fertiliser > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.fertiliser * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FERTILISER] * natoRepGainPer[FERTILISER]);
+    }
+    if (natoResourcesOut.fertiliser_liquid > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.fertiliser_liquid * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FERTILISER_LIQUID] * natoRepGainPer[FERTILISER_LIQUID]);
+    }
+    if (natoResourcesOut.service_material > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.service_material * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[SERVICE_MATERIAL] * natoRepGainPer[SERVICE_MATERIAL]);
+    }
+    if (natoResourcesOut.waste_mixed > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_mixed * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_MIXED] * natoRepGainPer[WASTE_MIXED]);
+    }
+    if (natoResourcesOut.waste_gravel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_gravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_GRAVEL] * natoRepGainPer[WASTE_GRAVEL]);
+    }
+    if (natoResourcesOut.waste_steel > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_steel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_STEEL] * natoRepGainPer[WASTE_STEEL]);
+    }
+    if (natoResourcesOut.waste_aluminium > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_aluminium * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_ALUMINIUM] * natoRepGainPer[WASTE_ALUMINIUM]);
+    }
+    if (natoResourcesOut.waste_plastic > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_plastic * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_PLASTIC] * natoRepGainPer[WASTE_PLASTIC]);
+    }
+    if (natoResourcesOut.waste_bio > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_bio * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_BIO] * natoRepGainPer[WASTE_BIO]);
+    }
+    if (natoResourcesOut.waste_burnable > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_burnable * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_BURNABLE] * natoRepGainPer[WASTE_BURNABLE]);
+    }
+    if (natoResourcesOut.waste_ash > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_ash * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_ASH] * natoRepGainPer[WASTE_ASH]);
+    }
+    if (natoResourcesOut.waste_toxic > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_toxic * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_TOXIC] * natoRepGainPer[WASTE_TOXIC]);
+    }
+    if (natoResourcesOut.waste_other > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.waste_other * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_OTHER] * natoRepGainPer[WASTE_OTHER]);
+    }
+    if (natoResourcesOut.water > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.water * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WATER] * natoRepGainPer[WATER]);
+    }
+    if (natoResourcesOut.usagewater > 0)
+    {
+        natoRepGained = natoRepGained + (natoResourcesOut.usagewater * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[USAGEWATER] * natoRepGainPer[USAGEWATER]);
+    }
+
+//////////////////////////////////////////
+//////////////////////////////////////////
+// USSR
+//////////////////////////////////////////
+//////////////////////////////////////////
+
+    if (ussrResourcesOut.rawbauxite > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.rawbauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWBAUXITE] * ussrRepGainPer[RAWBAUXITE]);
+    }
+    if (ussrResourcesOut.bauxite > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.bauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BAUXITE] * ussrRepGainPer[BAUXITE]);
+    }
+    if (ussrResourcesOut.alumina > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.rawbauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALUMINA] * ussrRepGainPer[ALUMINA]);
+    }
+    if (ussrResourcesOut.aluminium > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.bauxite * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALUMINIUM] * ussrRepGainPer[ALUMINIUM]);
+    }
+    if (ussrResourcesOut.rawcoal > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.rawcoal * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWCOAL] * ussrRepGainPer[RAWCOAL]);
+    }
+    if (ussrResourcesOut.coal > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.coal * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[COAL] * ussrRepGainPer[COAL]);
+    }
+    if (ussrResourcesOut.bricks > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.bricks * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BRICKS] * ussrRepGainPer[BRICKS]);
+    }
+    if (ussrResourcesOut.rawgravel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.rawgravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWGRAVEL] * ussrRepGainPer[RAWGRAVEL]);
+    }
+    if (ussrResourcesOut.gravel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.gravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[GRAVEL] * ussrRepGainPer[GRAVEL]);
+    }
+    if (ussrResourcesOut.prefabpanels > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.prefabpanels * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PREFABS] * ussrRepGainPer[PREFABS]);
+    }
+    if (ussrResourcesOut.cement > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.cement * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CEMENT] * ussrRepGainPer[CEMENT]);
+    }
+    if (ussrResourcesOut.concrete > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.concrete * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CONCRETE] * ussrRepGainPer[CONCRETE]);
+    }
+    if (ussrResourcesOut.asphalt > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.asphalt * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ASPHALT] * ussrRepGainPer[ASPHALT]);
+    }
+    if (ussrResourcesOut.rawiron > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.rawiron * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[RAWIRON] * ussrRepGainPer[RAWIRON]);
+    }
+    if (ussrResourcesOut.iron > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.iron * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[IRON] * ussrRepGainPer[IRON]);
+    }
+    if (ussrResourcesOut.steel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.steel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[STEEL] * ussrRepGainPer[STEEL]);
+    }
+    if (ussrResourcesOut.mcomponents > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.mcomponents * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[MCOMPONENTS] * ussrRepGainPer[MCOMPONENTS]);
+    }
+    if (ussrResourcesOut.plants > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.plants * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PLANTS] * ussrRepGainPer[PLANTS]);
+    }
+    if (ussrResourcesOut.livestock > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.livestock * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[LIVESTOCK] * ussrRepGainPer[LIVESTOCK]);
+    }
+    if (ussrResourcesOut.meat > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.meat * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[MEAT] * ussrRepGainPer[MEAT]);
+    }
+    if (ussrResourcesOut.food > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.food * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FOOD] * ussrRepGainPer[FOOD]);
+    }
+    if (ussrResourcesOut.alcohol > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.alcohol * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ALCOHOL] * ussrRepGainPer[ALCOHOL]);
+    }
+    if (ussrResourcesOut.fabric > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.fabric * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FABRIC] * ussrRepGainPer[FABRIC]);
+    }
+    if (ussrResourcesOut.clothes > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.clothes * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CLOTHES] * ussrRepGainPer[CLOTHES]);
+    }
+    if (ussrResourcesOut.wood > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.wood * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WOOD] * ussrRepGainPer[WOOD]);
+    }
+    if (ussrResourcesOut.boards > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.boards * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BOARDS] * ussrRepGainPer[BOARDS]);
+    }
+    if (ussrResourcesOut.explosives > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.explosives * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[EXPLOSIVES] * ussrRepGainPer[EXPLOSIVES]);
+    }
+    if (ussrResourcesOut.oil > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.oil * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[OIL] * ussrRepGainPer[OIL]);
+    }
+    if (ussrResourcesOut.fuel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.fuel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FUEL] * ussrRepGainPer[FUEL]);
+    }
+    if (ussrResourcesOut.bitumen > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.bitumen * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[BITUMEN] * ussrRepGainPer[BITUMEN]);
+    }
+    if (ussrResourcesOut.chemicals > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.chemicals * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[CHEMICALS] * ussrRepGainPer[CHEMICALS]);
+    }
+    if (ussrResourcesOut.plastics > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.plastics * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[PLASTICS] * ussrRepGainPer[PLASTICS]);
+    }    
+    if (ussrResourcesOut.ecomponents > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.ecomponents * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ECOMPONENTS] * ussrRepGainPer[ECOMPONENTS]);
+    }
+    if (ussrResourcesOut.eletronics > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.eletronics * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[ELECTRONICS] * ussrRepGainPer[ELECTRONICS]);
+    }
+    if (ussrResourcesOut.uranium > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.uranium * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[URANIUM] * ussrRepGainPer[URANIUM]);
+    }
+    if (ussrResourcesOut.yellowcake > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.yellowcake * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[YELLOWCAKE] * ussrRepGainPer[YELLOWCAKE]);
+    }
+    if (ussrResourcesOut.uf6 > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.uf6 * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[UF6] * ussrRepGainPer[UF6]);
+    }
+    if (ussrResourcesOut.nuclearfuel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.nuclearfuel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[NUCLEARFUEL] * ussrRepGainPer[NUCLEARFUEL]);
+    }
+    if (ussrResourcesOut.nuclearfuelburned > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.nuclearfuelburned * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[NUCLEARFUELBURNED] * ussrRepGainPer[NUCLEARFUELBURNED]);
+    }
+    if (ussrResourcesOut.fertiliser > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.fertiliser * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FERTILISER] * ussrRepGainPer[FERTILISER]);
+    }
+    if (ussrResourcesOut.fertiliser_liquid > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.fertiliser_liquid * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[FERTILISER_LIQUID] * ussrRepGainPer[FERTILISER_LIQUID]);
+    }
+    if (ussrResourcesOut.service_material > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.service_material * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[SERVICE_MATERIAL] * ussrRepGainPer[SERVICE_MATERIAL]);
+    }
+    if (ussrResourcesOut.waste_mixed > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_mixed * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_MIXED] * ussrRepGainPer[WASTE_MIXED]);
+    }
+    if (ussrResourcesOut.waste_gravel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_gravel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_GRAVEL] * ussrRepGainPer[WASTE_GRAVEL]);
+    }
+    if (ussrResourcesOut.waste_steel > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_steel * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_STEEL] * ussrRepGainPer[WASTE_STEEL]);
+    }
+    if (ussrResourcesOut.waste_aluminium > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_aluminium * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_ALUMINIUM] * ussrRepGainPer[WASTE_ALUMINIUM]);
+    }
+    if (ussrResourcesOut.waste_plastic > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_plastic * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_PLASTIC] * ussrRepGainPer[WASTE_PLASTIC]);
+    }
+    if (ussrResourcesOut.waste_bio > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_bio * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_BIO] * ussrRepGainPer[WASTE_BIO]);
+    }
+    if (ussrResourcesOut.waste_burnable > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_burnable * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_BURNABLE] * ussrRepGainPer[WASTE_BURNABLE]);
+    }
+    if (ussrResourcesOut.waste_ash > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_ash * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_ASH] * ussrRepGainPer[WASTE_ASH]);
+    }
+    if (ussrResourcesOut.waste_toxic > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_toxic * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_TOXIC] * ussrRepGainPer[WASTE_TOXIC]);
+    }
+    if (ussrResourcesOut.waste_other > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.waste_other * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WASTE_OTHER] * ussrRepGainPer[WASTE_OTHER]);
+    }
+    if (ussrResourcesOut.water > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.water * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[WATER] * ussrRepGainPer[WATER]);
+    }
+    if (ussrResourcesOut.usagewater > 0)
+    {
+        ussrRepGained = ussrRepGained + (ussrResourcesOut.usagewater * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[USAGEWATER] * ussrRepGainPer[USAGEWATER]);
+    }
+    
+    natoRep = natoRep + natoRepGained;
+    ussrRep = ussrRep + ussrRepGained;
+
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "Nato rep gained from exports: ");
+    strcat(temp_c1, natoRepGained);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "Ussr rep gained from exports: ");
+    strcat(temp_c1, ussrRepGained);
+    strcat(temp_c1, NEWLINE);
+
+    lastTradeSaveDayLong = saveDayLong;
+
+    returnVoid();
+}
+
 defineFunction(CalculateTrade, void)
 {
+    strcpy(temp_c1, "Trade info");
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "Day of month: ");
+    strcat(temp_c1, day);
+    strcat(temp_c1, NEWLINE);
+    strcat(temp_c1, "Last trade day check: ");
+    strcat(temp_c1, lastTradeUpdateDay);
+    strcat(temp_c1, NEWLINE);
+
     if (day ? 1 & lastTradeUpdateDay ? 0)
     {
+        ProcessTradeResources();
         lastTradeUpdateDay = 1;
-        
-        temp_i1 = lastSaveDayLong % 365;
-        temp_i2 = lastSaveDayLong / 365;
-        temp_i3 = saveDayLong % 365;
-        temp_i4 = saveDayLong / 365;
-        checkStats.GetFromDateToDate_D365Y(temp_i1, temp_i2, temp_i3, temp_i4);
-
-        Building_GetNumberOfBuildings(buildingCount);
-        Vehicle_GetNumberOfVehicles(vehicleCount);
-
-        natoResourcesIn = checkStats.ImportTonsUSD;
-        ussrResourcesIn = checkStats.ImportTonsRUB;
-        natoResourcesOut = checkStats.ExportTonsUSD;
-        ussrResourcesOut = checkStats.ExportTonsRUB;
-
-        if (natoResourcesOut.steel > 0)
-        {
-            natoRep = natoRep + (natoResourcesOut.steel * REP_TRADE_PER_FAV_TON);
-        }
-        strcpy(temp_c1, "Nato steel exported: ");
-        temp_f1 = natoResourcesOut.steel;
-        strcat(temp_c1, temp_f1);
-
-        if (ussrResourcesOut.steel > 0)
-        {
-            ussrRep = ussrRep + (ussrResourcesOut.steel * REP_TRADE_PER_FAV_TON);
-        }
-        
-        Scenario_WindowWithImageTopLeft("test trade", temp_c1, "", 3);
     }
     elseif (day ? 2 & lastTradeUpdateDay ? 1)
     {
@@ -273,10 +745,14 @@ defineFunction(CalculateTrade, void)
     elseif (day ? 3 & lastTradeUpdateDay ? 2)
     {
         //UpdateTradeValues();
-        lastTradeUpdateDay = 3;
+        lastTradeUpdateDay = 0;
     }
-
-    //Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    else ()
+    {
+        lastTradeUpdateDay = 0;
+    }
+        
+    Scenario_WindowWithImageTopLeft("test trade", temp_c1, "", 3);
     
     returnVoid();
 }

@@ -61,16 +61,6 @@ defineFunction(InitSettings, void)
     BASE_NATO_REP = 200;
     BASE_USSR_REP = 450;
 
-    MAX_NORMAL_TRADE_REP = 550;
-    MAX_FAV_TRADE_REP = 700;
-
-// The amount of reputation gained/lost per "standard" ton
-    REP_TRADE_PER_LOW_TON = 0.01;
-    REP_TRADE_PER_TON = 0.02;
-    REP_TRADE_PER_FAV_TON = 0.04;
-    REP_TRADE_PER_SPECIAL_TON = 1.5;
-    REP_TRADE_DROP_PER_SPECIAL_TON = 1.2;
-
 // A modifier to bring your reputation back to neutral levels over time
     REP_CENTERING_ABOVE = 0.015;
     REP_CENTERING_BELOW = 0.035;
