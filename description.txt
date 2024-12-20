@@ -1,1 +1,38 @@
-A mod that adds in-game contracts, trade, and reputation for the NATO and Soviets. You must balance the forces to make sure they don't get upset with you and cut you off!
+[url=https://patreon.com/netblitzer][img]https://i.imgur.com/H61MBTY.png[/img][/url]
+[url=https://ko-fi.com/netblitzer][img]https://i.imgur.com/zPNlxeC.png[/img][/url]
+
+[quote=]
+[h2]THIS MOD IS IN ALPHA[/h2]
+[h3]This mod currently will cause permanent changes to the economy. Even with the cancel/reset scripts removing as much as possible, the devs currently use the same functions that the mod uses.[/h3]
+[/quote]
+
+[h1]Description[/h1]
+
+Ever got bored playing a game with Soviets and NATO and not being able to interact anymore than buying and selling resources? [b]El Presidente: Cold War Politics[/b] is the answer! With the core idea of having a faction reputation to maintain, the mod [i](eventually)[/i] adds trade pricing, embargoes, resource delivery contracts, nuclear intrigue, military missions, and more!
+
+[h1]Usage[/h1]
+To start using the mod:
+[olist]
+[*]Open the escape menu
+[*]Open the scripts list
+[*]Click "El Presidente: Cold War Contracts (Alpha)"
+[/olist]
+
+[h1]Current Features[/h1]
+[b]Finished[/b]
+[i]Unfinished[/i]
+[ulist]
+[*][b]Faction Reputation[/b]
+[*][b]Trade pricing based on reputation[b]
+[*][b]Trading high value resources increases reputation[b]
+[*][b]Trading waste/toxic resources lowers reputation[b]
+[*][i]Trade embargoes[i]
+[*][i]Delivery contracts[i]
+[*][i]Increase production contracts[i]
+[*][i]Nuclear Inspectors[i]
+[*][i]Future development contracts[i]
+[*][i]Set up military base[i]
+[*][i]Fly sortie missions[i]
+[*][i]Produce and deliver military vehicles[i]
+[*][i]More planned[i]
+[/ulist]
