@@ -1,9 +1,10 @@
 defineArray(float[64], tradeRepMultipliers);    // Static array of rep per ton multiplier to make "dense" resources more impactful, "rep ton"
+defineArray(int[64], embargoCostMultipliers);   // Static array of the cost multiplier when a resource is embargoed
 
-defineArray(float[64], natoBuyMultipliers);     // NATO: Constant updating array of all the BUYING multipliers per resource
-defineArray(float[64], natoSellMultipliers);    // NATO: Constant updating array of all the SELLING multipliers per resource
-defineArray(float[64], ussrBuyMultipliers);     // USSR: Constant updating array of all the BUYING multipliers per resource
-defineArray(float[64], ussrSellMultipliers);    // USSR: Constant updating array of all the SELLING multipliers per resource
+defineArray(float[64], natoBuyMultipliers);     // NATO: Dynamic array of all the BUYING multipliers per resource
+defineArray(float[64], natoSellMultipliers);    // NATO: Dynamic array of all the SELLING multipliers per resource
+defineArray(float[64], ussrBuyMultipliers);     // USSR: Dynamic array of all the BUYING multipliers per resource
+defineArray(float[64], ussrSellMultipliers);    // USSR: Dynamic array of all the SELLING multipliers per resource
 
 defineArray(int[64], natoBuyDesire);            // NATO: Static array of the desire of the faction to BUY resources from the player
 defineArray(int[64], natoSellDesire);           // NATO: Static array of the desire of the faction to SELL resources to the player
@@ -12,6 +13,14 @@ defineArray(int[64], ussrSellDesire);           // USSR: Static array of the des
 
 defineArray(float[64], natoRepGainPer);         // NATO: Static array of the amount of reputation gained per "rep ton" of each resource
 defineArray(float[64], ussrRepGainPer);         // USSR: Static array of the amount of reputation gained per "rep ton" of each resource
+
+defineArray(int[64], natoEmbargoThresholdSell); // NATO: Static array when faction stops selling resources to the player and begins embargoing/fining them
+defineArray(int[64], natoEmbargoThresholdBuy);  // NATO: Static array when faction stops buying resources from the player and begins embargoing/fining them
+defineArray(int[64], ussrEmbargoThresholdSell); // USSR: Static array when faction stops selling resources to the player and begins embargoing/fining them
+defineArray(int[64], ussrEmbargoThresholdBuy);  // USSR: Static array when faction stops buying resources from the player and begins embargoing/fining them
+
+defineArray(float[64], natoTradeRepQuarterly);  // NATO: Dynamic array of the amount of reputation gained over the past quarter
+defineArray(float[64], ussrTradeRepQuarterly);  // USSR: Dynamic array of the amount of reputation gained over the past quarter
 
 defineVariable(int, updateFlipFlop);
 
@@ -136,6 +145,11 @@ defineFunction(InitTradeConsts, void)
     WATER = 51;
     USAGEWATER = 52;
     
+//////////////////////////////////////////
+//////////////////////////////////////////
+// STATIC
+//////////////////////////////////////////
+//////////////////////////////////////////
 
     tradeRepMultipliers[RAWBAUXITE]           = 0.0006;
     tradeRepMultipliers[BAUXITE]              = 0.001;
@@ -191,6 +205,61 @@ defineFunction(InitTradeConsts, void)
     tradeRepMultipliers[WASTE_OTHER]          = 0.0067;
     tradeRepMultipliers[WATER]                = 0.002;
     tradeRepMultipliers[USAGEWATER]           = 0.004;
+
+    embargoCostMultipliers[RAWBAUXITE]           = -5;
+    embargoCostMultipliers[BAUXITE]              = -5;
+    embargoCostMultipliers[ALUMINA]              = -5;
+    embargoCostMultipliers[ALUMINIUM]            = -15;
+    embargoCostMultipliers[RAWCOAL]              = -5;
+    embargoCostMultipliers[COAL]                 = -5;
+    embargoCostMultipliers[BRICKS]               = -5;
+    embargoCostMultipliers[RAWGRAVEL]            = -5;
+    embargoCostMultipliers[GRAVEL]               = -5;
+    embargoCostMultipliers[PREFABS]              = -5;
+    embargoCostMultipliers[CEMENT]               = -5;
+    embargoCostMultipliers[CONCRETE]             = -5;
+    embargoCostMultipliers[ASPHALT]              = -5;
+    embargoCostMultipliers[RAWIRON]              = -5;
+    embargoCostMultipliers[IRON]                 = -5;
+    embargoCostMultipliers[STEEL]                = -15;
+    embargoCostMultipliers[MCOMPONENTS]          = -15;
+    embargoCostMultipliers[PLANTS]               = -5;
+    embargoCostMultipliers[LIVESTOCK]            = -5;
+    embargoCostMultipliers[MEAT]                 = -5;
+    embargoCostMultipliers[FOOD]                 = -5;
+    embargoCostMultipliers[ALCOHOL]              = -5;
+    embargoCostMultipliers[FABRIC]               = -5;
+    embargoCostMultipliers[CLOTHES]              = -5;
+    embargoCostMultipliers[WOOD]                 = -5;
+    embargoCostMultipliers[BOARDS]               = -5;
+    embargoCostMultipliers[EXPLOSIVES]           = -25;
+    embargoCostMultipliers[OIL]                  = -5;
+    embargoCostMultipliers[FUEL]                 = -5;
+    embargoCostMultipliers[BITUMEN]              = -5;
+    embargoCostMultipliers[CHEMICALS]            = -5;
+    embargoCostMultipliers[PLASTICS]             = -5;
+    embargoCostMultipliers[ECOMPONENTS]          = -10;
+    embargoCostMultipliers[ELECTRONICS]          = -10;
+    embargoCostMultipliers[URANIUM]              = -25;
+    embargoCostMultipliers[YELLOWCAKE]           = -25;
+    embargoCostMultipliers[UF6]                  = -25;
+    embargoCostMultipliers[NUCLEARFUEL]          = -50;
+    embargoCostMultipliers[NUCLEARFUELBURNED]    = 50;
+    embargoCostMultipliers[FERTILISER]           = -5;
+    embargoCostMultipliers[FERTILISER_LIQUID]    = -5;
+    embargoCostMultipliers[SERVICE_MATERIAL]     = 5;
+    embargoCostMultipliers[WASTE_MIXED]          = 5;
+    embargoCostMultipliers[WASTE_GRAVEL]         = -5;
+    embargoCostMultipliers[WASTE_STEEL]          = -10;
+    embargoCostMultipliers[WASTE_ALUMINIUM]      = -5;
+    embargoCostMultipliers[WASTE_PLASTIC]        = -5;
+    embargoCostMultipliers[WASTE_BIO]            = -5;
+    embargoCostMultipliers[WASTE_BURNABLE]       = 5;
+    embargoCostMultipliers[WASTE_ASH]            = 5;
+    embargoCostMultipliers[WASTE_TOXIC]          = 25;
+    embargoCostMultipliers[WASTE_OTHER]          = 5;
+    embargoCostMultipliers[WATER]                = 5;
+    embargoCostMultipliers[USAGEWATER]           = 5;
 
 //////////////////////////////////////////
 //////////////////////////////////////////
@@ -362,6 +431,116 @@ defineFunction(InitTradeConsts, void)
     natoRepGainPer[WASTE_OTHER]         = -3;
     natoRepGainPer[WATER]               = 0;
     natoRepGainPer[USAGEWATER]          = -3;
+    
+    natoEmbargoThresholdSell[RAWBAUXITE]          = 100;
+    natoEmbargoThresholdSell[BAUXITE]             = 100;
+    natoEmbargoThresholdSell[ALUMINA]             = 150;
+    natoEmbargoThresholdSell[ALUMINIUM]           = 400;
+    natoEmbargoThresholdSell[RAWCOAL]             = 100;
+    natoEmbargoThresholdSell[COAL]                = 100;
+    natoEmbargoThresholdSell[BRICKS]              = 150;
+    natoEmbargoThresholdSell[RAWGRAVEL]           = 100;
+    natoEmbargoThresholdSell[GRAVEL]              = 100;
+    natoEmbargoThresholdSell[PREFABS]             = 150;
+    natoEmbargoThresholdSell[CEMENT]              = 150;
+    natoEmbargoThresholdSell[CONCRETE]            = 150;
+    natoEmbargoThresholdSell[ASPHALT]             = 150;
+    natoEmbargoThresholdSell[RAWIRON]             = 100;
+    natoEmbargoThresholdSell[IRON]                = 150;
+    natoEmbargoThresholdSell[STEEL]               = 250;
+    natoEmbargoThresholdSell[MCOMPONENTS]         = 300;
+    natoEmbargoThresholdSell[PLANTS]              = 50;
+    natoEmbargoThresholdSell[LIVESTOCK]           = 200;
+    natoEmbargoThresholdSell[MEAT]                = 250;
+    natoEmbargoThresholdSell[FOOD]                = 50;
+    natoEmbargoThresholdSell[ALCOHOL]             = 150;
+    natoEmbargoThresholdSell[FABRIC]              = 150;
+    natoEmbargoThresholdSell[CLOTHES]             = 200;
+    natoEmbargoThresholdSell[WOOD]                = 100;
+    natoEmbargoThresholdSell[BOARDS]              = 150;
+    natoEmbargoThresholdSell[EXPLOSIVES]          = 500;
+    natoEmbargoThresholdSell[OIL]                 = 200;
+    natoEmbargoThresholdSell[FUEL]                = 200;
+    natoEmbargoThresholdSell[BITUMEN]             = 200;
+    natoEmbargoThresholdSell[CHEMICALS]           = 250;
+    natoEmbargoThresholdSell[PLASTICS]            = 250;
+    natoEmbargoThresholdSell[ECOMPONENTS]         = 350;
+    natoEmbargoThresholdSell[ELECTRONICS]         = 350;
+    natoEmbargoThresholdSell[URANIUM]             = 850;
+    natoEmbargoThresholdSell[YELLOWCAKE]          = 850;
+    natoEmbargoThresholdSell[UF6]                 = 850;
+    natoEmbargoThresholdSell[NUCLEARFUEL]         = 950;
+    natoEmbargoThresholdSell[NUCLEARFUELBURNED]   = 950;
+    natoEmbargoThresholdSell[FERTILISER]          = 100;
+    natoEmbargoThresholdSell[FERTILISER_LIQUID]   = 100;
+    natoEmbargoThresholdSell[SERVICE_MATERIAL]    = 50;
+    natoEmbargoThresholdSell[WASTE_MIXED]         = 50;
+    natoEmbargoThresholdSell[WASTE_GRAVEL]        = 50;
+    natoEmbargoThresholdSell[WASTE_STEEL]         = 50;
+    natoEmbargoThresholdSell[WASTE_ALUMINIUM]     = 50;
+    natoEmbargoThresholdSell[WASTE_PLASTIC]       = 50;
+    natoEmbargoThresholdSell[WASTE_BIO]           = 50;
+    natoEmbargoThresholdSell[WASTE_BURNABLE]      = 50;
+    natoEmbargoThresholdSell[WASTE_ASH]           = 50;
+    natoEmbargoThresholdSell[WASTE_TOXIC]         = 50;
+    natoEmbargoThresholdSell[WASTE_OTHER]         = 50;
+    natoEmbargoThresholdSell[WATER]               = 50;
+    natoEmbargoThresholdSell[USAGEWATER]          = 50;
+    
+    natoEmbargoThresholdBuy[RAWBAUXITE]          = 100;
+    natoEmbargoThresholdBuy[BAUXITE]             = 100;
+    natoEmbargoThresholdBuy[ALUMINA]             = 100;
+    natoEmbargoThresholdBuy[ALUMINIUM]           = 250;
+    natoEmbargoThresholdBuy[RAWCOAL]             = 50;
+    natoEmbargoThresholdBuy[COAL]                = 50;
+    natoEmbargoThresholdBuy[BRICKS]              = 150;
+    natoEmbargoThresholdBuy[RAWGRAVEL]           = 100;
+    natoEmbargoThresholdBuy[GRAVEL]              = 100;
+    natoEmbargoThresholdBuy[PREFABS]             = 150;
+    natoEmbargoThresholdBuy[CEMENT]              = 150;
+    natoEmbargoThresholdBuy[CONCRETE]            = 150;
+    natoEmbargoThresholdBuy[ASPHALT]             = 150;
+    natoEmbargoThresholdBuy[RAWIRON]             = 100;
+    natoEmbargoThresholdBuy[IRON]                = 100;
+    natoEmbargoThresholdBuy[STEEL]               = 150;
+    natoEmbargoThresholdBuy[MCOMPONENTS]         = 400;
+    natoEmbargoThresholdBuy[PLANTS]              = 50;
+    natoEmbargoThresholdBuy[LIVESTOCK]           = 200;
+    natoEmbargoThresholdBuy[MEAT]                = 500;
+    natoEmbargoThresholdBuy[FOOD]                = 400;
+    natoEmbargoThresholdBuy[ALCOHOL]             = 200;
+    natoEmbargoThresholdBuy[FABRIC]              = 200;
+    natoEmbargoThresholdBuy[CLOTHES]             = 500;
+    natoEmbargoThresholdBuy[WOOD]                = 50;
+    natoEmbargoThresholdBuy[BOARDS]              = 100;
+    natoEmbargoThresholdBuy[EXPLOSIVES]          = 600;
+    natoEmbargoThresholdBuy[OIL]                 = 50;
+    natoEmbargoThresholdBuy[FUEL]                = 50;
+    natoEmbargoThresholdBuy[BITUMEN]             = 50;
+    natoEmbargoThresholdBuy[CHEMICALS]           = 300;
+    natoEmbargoThresholdBuy[PLASTICS]            = 300;
+    natoEmbargoThresholdBuy[ECOMPONENTS]         = 500;
+    natoEmbargoThresholdBuy[ELECTRONICS]         = 700;
+    natoEmbargoThresholdBuy[URANIUM]             = 100;
+    natoEmbargoThresholdBuy[YELLOWCAKE]          = 100;
+    natoEmbargoThresholdBuy[UF6]                 = 600;
+    natoEmbargoThresholdBuy[NUCLEARFUEL]         = 900;
+    natoEmbargoThresholdBuy[NUCLEARFUELBURNED]   = 900;
+    natoEmbargoThresholdBuy[FERTILISER]          = 150;
+    natoEmbargoThresholdBuy[FERTILISER_LIQUID]   = 100;
+    natoEmbargoThresholdBuy[SERVICE_MATERIAL]    = 100;
+    natoEmbargoThresholdBuy[WASTE_MIXED]         = 850;
+    natoEmbargoThresholdBuy[WASTE_GRAVEL]        = 750;
+    natoEmbargoThresholdBuy[WASTE_STEEL]         = 500;
+    natoEmbargoThresholdBuy[WASTE_ALUMINIUM]     = 600;
+    natoEmbargoThresholdBuy[WASTE_PLASTIC]       = 850;
+    natoEmbargoThresholdBuy[WASTE_BIO]           = 700;
+    natoEmbargoThresholdBuy[WASTE_BURNABLE]      = 800;
+    natoEmbargoThresholdBuy[WASTE_ASH]           = 800;
+    natoEmbargoThresholdBuy[WASTE_TOXIC]         = 900;
+    natoEmbargoThresholdBuy[WASTE_OTHER]         = 800;
+    natoEmbargoThresholdBuy[WATER]               = 100;
+    natoEmbargoThresholdBuy[USAGEWATER]          = 800;
 
 
 //////////////////////////////////////////
@@ -534,6 +713,116 @@ defineFunction(InitTradeConsts, void)
     ussrRepGainPer[WASTE_OTHER]         = -1;
     ussrRepGainPer[WATER]               = 0;
     ussrRepGainPer[USAGEWATER]          = -1;
+    
+    ussrEmbargoThresholdSell[RAWBAUXITE]          = 100;
+    ussrEmbargoThresholdSell[BAUXITE]             = 100;
+    ussrEmbargoThresholdSell[ALUMINA]             = 150;
+    ussrEmbargoThresholdSell[ALUMINIUM]           = 350;
+    ussrEmbargoThresholdSell[RAWCOAL]             = 100;
+    ussrEmbargoThresholdSell[COAL]                = 100;
+    ussrEmbargoThresholdSell[BRICKS]              = 150;
+    ussrEmbargoThresholdSell[RAWGRAVEL]           = 100;
+    ussrEmbargoThresholdSell[GRAVEL]              = 100;
+    ussrEmbargoThresholdSell[PREFABS]             = 150;
+    ussrEmbargoThresholdSell[CEMENT]              = 150;
+    ussrEmbargoThresholdSell[CONCRETE]            = 150;
+    ussrEmbargoThresholdSell[ASPHALT]             = 150;
+    ussrEmbargoThresholdSell[RAWIRON]             = 100;
+    ussrEmbargoThresholdSell[IRON]                = 150;
+    ussrEmbargoThresholdSell[STEEL]               = 200;
+    ussrEmbargoThresholdSell[MCOMPONENTS]         = 200;
+    ussrEmbargoThresholdSell[PLANTS]              = 50;
+    ussrEmbargoThresholdSell[LIVESTOCK]           = 150;
+    ussrEmbargoThresholdSell[MEAT]                = 150;
+    ussrEmbargoThresholdSell[FOOD]                = 50;
+    ussrEmbargoThresholdSell[ALCOHOL]             = 150;
+    ussrEmbargoThresholdSell[FABRIC]              = 150;
+    ussrEmbargoThresholdSell[CLOTHES]             = 200;
+    ussrEmbargoThresholdSell[WOOD]                = 100;
+    ussrEmbargoThresholdSell[BOARDS]              = 150;
+    ussrEmbargoThresholdSell[EXPLOSIVES]          = 400;
+    ussrEmbargoThresholdSell[OIL]                 = 150;
+    ussrEmbargoThresholdSell[FUEL]                = 150;
+    ussrEmbargoThresholdSell[BITUMEN]             = 150;
+    ussrEmbargoThresholdSell[CHEMICALS]           = 250;
+    ussrEmbargoThresholdSell[PLASTICS]            = 250;
+    ussrEmbargoThresholdSell[ECOMPONENTS]         = 200;
+    ussrEmbargoThresholdSell[ELECTRONICS]         = 250;
+    ussrEmbargoThresholdSell[URANIUM]             = 850;
+    ussrEmbargoThresholdSell[YELLOWCAKE]          = 850;
+    ussrEmbargoThresholdSell[UF6]                 = 850;
+    ussrEmbargoThresholdSell[NUCLEARFUEL]         = 850;
+    ussrEmbargoThresholdSell[NUCLEARFUELBURNED]   = 850;
+    ussrEmbargoThresholdSell[FERTILISER]          = 100;
+    ussrEmbargoThresholdSell[FERTILISER_LIQUID]   = 100;
+    ussrEmbargoThresholdSell[SERVICE_MATERIAL]    = 50;
+    ussrEmbargoThresholdSell[WASTE_MIXED]         = 50;
+    ussrEmbargoThresholdSell[WASTE_GRAVEL]        = 50;
+    ussrEmbargoThresholdSell[WASTE_STEEL]         = 50;
+    ussrEmbargoThresholdSell[WASTE_ALUMINIUM]     = 50;
+    ussrEmbargoThresholdSell[WASTE_PLASTIC]       = 50;
+    ussrEmbargoThresholdSell[WASTE_BIO]           = 50;
+    ussrEmbargoThresholdSell[WASTE_BURNABLE]      = 50;
+    ussrEmbargoThresholdSell[WASTE_ASH]           = 50;
+    ussrEmbargoThresholdSell[WASTE_TOXIC]         = 50;
+    ussrEmbargoThresholdSell[WASTE_OTHER]         = 50;
+    ussrEmbargoThresholdSell[WATER]               = 50;
+    ussrEmbargoThresholdSell[USAGEWATER]          = 50;
+    
+    ussrEmbargoThresholdBuy[RAWBAUXITE]          = 100;
+    ussrEmbargoThresholdBuy[BAUXITE]             = 100;
+    ussrEmbargoThresholdBuy[ALUMINA]             = 100;
+    ussrEmbargoThresholdBuy[ALUMINIUM]           = 250;
+    ussrEmbargoThresholdBuy[RAWCOAL]             = 50;
+    ussrEmbargoThresholdBuy[COAL]                = 50;
+    ussrEmbargoThresholdBuy[BRICKS]              = 150;
+    ussrEmbargoThresholdBuy[RAWGRAVEL]           = 100;
+    ussrEmbargoThresholdBuy[GRAVEL]              = 100;
+    ussrEmbargoThresholdBuy[PREFABS]             = 150;
+    ussrEmbargoThresholdBuy[CEMENT]              = 150;
+    ussrEmbargoThresholdBuy[CONCRETE]            = 150;
+    ussrEmbargoThresholdBuy[ASPHALT]             = 150;
+    ussrEmbargoThresholdBuy[RAWIRON]             = 100;
+    ussrEmbargoThresholdBuy[IRON]                = 100;
+    ussrEmbargoThresholdBuy[STEEL]               = 150;
+    ussrEmbargoThresholdBuy[MCOMPONENTS]         = 250;
+    ussrEmbargoThresholdBuy[PLANTS]              = 50;
+    ussrEmbargoThresholdBuy[LIVESTOCK]           = 100;
+    ussrEmbargoThresholdBuy[MEAT]                = 150;
+    ussrEmbargoThresholdBuy[FOOD]                = 100;
+    ussrEmbargoThresholdBuy[ALCOHOL]             = 100;
+    ussrEmbargoThresholdBuy[FABRIC]              = 150;
+    ussrEmbargoThresholdBuy[CLOTHES]             = 250;
+    ussrEmbargoThresholdBuy[WOOD]                = 100;
+    ussrEmbargoThresholdBuy[BOARDS]              = 150;
+    ussrEmbargoThresholdBuy[EXPLOSIVES]          = 300;
+    ussrEmbargoThresholdBuy[OIL]                 = 50;
+    ussrEmbargoThresholdBuy[FUEL]                = 50;
+    ussrEmbargoThresholdBuy[BITUMEN]             = 50;
+    ussrEmbargoThresholdBuy[CHEMICALS]           = 300;
+    ussrEmbargoThresholdBuy[PLASTICS]            = 300;
+    ussrEmbargoThresholdBuy[ECOMPONENTS]         = 250;
+    ussrEmbargoThresholdBuy[ELECTRONICS]         = 150;
+    ussrEmbargoThresholdBuy[URANIUM]             = 100;
+    ussrEmbargoThresholdBuy[YELLOWCAKE]          = 100;
+    ussrEmbargoThresholdBuy[UF6]                 = 600;
+    ussrEmbargoThresholdBuy[NUCLEARFUEL]         = 400;
+    ussrEmbargoThresholdBuy[NUCLEARFUELBURNED]   = 600;
+    ussrEmbargoThresholdBuy[FERTILISER]          = 150;
+    ussrEmbargoThresholdBuy[FERTILISER_LIQUID]   = 100;
+    ussrEmbargoThresholdBuy[SERVICE_MATERIAL]    = 100;
+    ussrEmbargoThresholdBuy[WASTE_MIXED]         = 850;
+    ussrEmbargoThresholdBuy[WASTE_GRAVEL]        = 750;
+    ussrEmbargoThresholdBuy[WASTE_STEEL]         = 500;
+    ussrEmbargoThresholdBuy[WASTE_ALUMINIUM]     = 600;
+    ussrEmbargoThresholdBuy[WASTE_PLASTIC]       = 850;
+    ussrEmbargoThresholdBuy[WASTE_BIO]           = 700;
+    ussrEmbargoThresholdBuy[WASTE_BURNABLE]      = 800;
+    ussrEmbargoThresholdBuy[WASTE_ASH]           = 800;
+    ussrEmbargoThresholdBuy[WASTE_TOXIC]         = 900;
+    ussrEmbargoThresholdBuy[WASTE_OTHER]         = 800;
+    ussrEmbargoThresholdBuy[WATER]               = 100;
+    ussrEmbargoThresholdBuy[USAGEWATER]          = 800;
 
     for (i = 0, i < 53, i = i + 1)
     {
@@ -541,6 +830,8 @@ defineFunction(InitTradeConsts, void)
         natoSellMultipliers[i] = 1;
         ussrBuyMultipliers[i] = 1;
         ussrSellMultipliers[i] = 1;
+        natoTradeRepQuarterly[i] = 0;
+        ussrTradeRepQuarterly[i] = 0;
     }
 
     returnVoid();

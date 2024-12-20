@@ -1,4 +1,5 @@
-include("include/trade_declarations.txt");
+include("include/trade/trade_helper_functions.txt");
+include("include/trade/trade_declarations.txt");
 
 defineFunction(InitTrade, void)
 {
@@ -7,25 +8,31 @@ defineFunction(InitTrade, void)
     returnVoid();
 }
 
-defineFunction(UpdateTradeValues, void)
+defineVariable(float, repCostMultiplier);
+defineFunction(CalculateRepCostMultiplier, float, float:f_in_reputation)
 {
-    if (natoRep < 350)
+    if (f_in_reputation < 350 | f_in_reputation ? 350)
     {
-        temp_f1 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
+        repCostMultiplier = 1.00 + (1.00 / 10718750.00) * (350.00 - f_in_reputation) * (350.00 - f_in_reputation) * (350.00 - f_in_reputation);
+    }
+    elseif(f_in_reputation > 600 | f_in_reputation ? 600)
+    {
+        repCostMultiplier = 1.00 - (1.00 / 212268.00) * (600.00 - f_in_reputation) * (600.00 - f_in_reputation);
     }
     else()
     {
-        temp_f1 = 1;
+        repCostMultiplier = 1;
     }
 
-    if (ussrRep < 350)
-    {
-        temp_f2 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
-    }
-    else()
-    {
-        temp_f2 = 1;
-    }
+    return(repCostMultiplier);
+}
+
+defineVariable(int, embargoMultiplier);
+defineFunction(UpdateTradeValues, void)
+{
+    temp_f1 = CalculateRepCostMultiplier(natoRep);
+    temp_f2 = CalculateRepCostMultiplier(ussrRep);
+    temp_i6 = -1;
 
     for (i = 0, i < 53, i = i + 1)
     {
@@ -57,6 +64,7 @@ defineFunction(UpdateTradeValues, void)
         {
             temp_f3 = 1;
         }
+
         if (natoSellDesire[i] ? 0)
         {
             temp_f4 = 10;
@@ -86,16 +94,34 @@ defineFunction(UpdateTradeValues, void)
             temp_f4 = 1;
         }
 
-        natoBuyMultipliers[i] = temp_f1 * temp_f3;
-        natoSellMultipliers[i] = (1.00 / temp_f1) * temp_f4;
+        // For now make the embargo just a multiplier
+        if (natoRep < natoEmbargoThresholdBuy[i])
+        {
+            embargoMultiplier = embargoCostMultipliers[i];
+        }
+        else()
+        {
+            embargoMultiplier = 1;
+        }
+        natoBuyMultipliers[i] = temp_f1 * temp_f3;// + embargoMultiplier;
+
+        if (natoRep < natoEmbargoThresholdSell[i])
+        {
+            embargoMultiplier = embargoCostMultipliers[i];
+        }
+        else()
+        {
+            embargoMultiplier = 1;
+        }
+        natoSellMultipliers[i] = (1.00 / temp_f1) * temp_f4;// + embargoMultiplier;
         
         if (ussrBuyDesire[i] ? 0)
         {
-            temp_f3 = 10;
+            temp_f3 = 8;
         }
         elseif (ussrBuyDesire[i] ? 1)
         {
-            temp_f3 = 3.5;
+            temp_f3 = 4;
         }
         elseif (ussrBuyDesire[i] ? 2)
         {
@@ -107,23 +133,24 @@ defineFunction(UpdateTradeValues, void)
         }
         elseif (ussrBuyDesire[i] ? 4)
         {
-            temp_f3 = 0.85;
+            temp_f3 = 0.8;
         }
         elseif (ussrBuyDesire[i] ? 5)
         {
-            temp_f3 = 0.6;
+            temp_f3 = 0.65;
         }
         else()
         {
             temp_f3 = 1;
         }
+
         if (ussrSellDesire[i] ? 0)
         {
-            temp_f4 = 10;
+            temp_f4 = 8;
         }
         elseif (ussrSellDesire[i] ? 1)
         {
-            temp_f4 = 3.5;
+            temp_f4 = 4;
         }
         elseif (ussrSellDesire[i] ? 2)
         {
@@ -135,19 +162,37 @@ defineFunction(UpdateTradeValues, void)
         }
         elseif (ussrSellDesire[i] ? 4)
         {
-            temp_f4 = 0.85;
+            temp_f4 = 0.8;
         }
         elseif (ussrSellDesire[i] ? 5)
         {
-            temp_f4 = 0.6;
+            temp_f4 = 0.65;
         }
         else()
         {
             temp_f4 = 1;
         }
 
-        ussrBuyMultipliers[i] = temp_f2 * temp_f3;
-        ussrSellMultipliers[i] = (1.00 / temp_f2) * temp_f4;
+        // For now make the embargo just a multiplier
+        if (ussrRep < ussrEmbargoThresholdBuy[i])
+        {
+            embargoMultiplier = embargoCostMultipliers[i];
+        }
+        else()
+        {
+            embargoMultiplier = 1;
+        }
+        ussrBuyMultipliers[i] = temp_f2 * temp_f3;// * embargoMultiplier;
+
+        if (ussrRep < ussrEmbargoThresholdSell[i])
+        {
+            embargoMultiplier = embargoCostMultipliers[i];
+        }
+        else()
+        {
+            embargoMultiplier = 1;
+        }
+        ussrSellMultipliers[i] = (1.00 / temp_f2) * temp_f4;// / embargoMultiplier;
     }
 
     returnVoid();
@@ -158,80 +203,65 @@ defineFunction(UpdateTradeFactors, void)
     strcpy(temp_c1, "update: ");
     strcat(temp_c1, NEWLINE);
     
-    if (natoRep < 350)
-    {
-        temp_f1 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
-    }
-    else()
-    {
-        temp_f1 = 1;
-    }
-
-    if (ussrRep < 350)
-    {
-        temp_f2 = 1.00 + (1.00 / 3000000.00) * (350.00 - natoRep) * (350.00 - natoRep) * (350.00 - natoRep);
-    }
-    else()
-    {
-        temp_f2 = 1;
-    }
+    temp_f1 = CalculateRepCostMultiplier(natoRep);
+    temp_f2 = CalculateRepCostMultiplier(ussrRep);
     
     strcat(temp_c1, "nato factor: ");
     strcat(temp_c1, temp_f1);
     strcat(temp_c1, " ussr factor: ");
     strcat(temp_c1, temp_f2);
     strcat(temp_c1, NEWLINE);
-    for (i = 0, i < 4, i = i + 1)
+
+
+    checkStats.GetPresent();
+    natoResourcesIn = checkStats.ImportTonsUSD;
+    ussrResourcesIn = checkStats.ImportTonsRUB;
+    natoResourcesOut = checkStats.ExportTonsUSD;
+    ussrResourcesOut = checkStats.ExportTonsRUB;
+
+    for (i = 0, i < 53, i = i + 1)
     {
-        temp_f1 = natoSellMultipliers[i];
-        temp_f2 = natoBuyMultipliers[i];
-        temp_f3 = ussrSellMultipliers[i];
-        temp_f4 = ussrBuyMultipliers[i];
+        //temp_f1 = natoSellMultipliers[i];
+        //temp_f2 = natoBuyMultipliers[i];
+        //temp_f3 = ussrSellMultipliers[i];
+        //temp_f4 = ussrBuyMultipliers[i];
 
-        if (i ? 0)
-        {
-            temp_s1 = "rawbauxite";
-        }
-        elseif (i ? 1)
-        {
-            temp_s1 = "bauxite";
-        }
-        elseif (i ? 2)
-        {
-            temp_s1 = "alumina";
-        }
-        elseif (i ? 3)
-        {
-            temp_s1 = "aluminium";
-        }
+        temp_s1 = GetResourceStringFromIndex(i);
 
-        Resources_SetCostUSD_SellFactor(temp_s1, temp_f2);
         Resources_SetCostUSD_PurchaseFactor(temp_s1, temp_f1);
-        Resources_SetCostRUB_SellFactor(temp_s1, temp_f4);
+        Resources_SetCostUSD_SellFactor(temp_s1, temp_f2);
         Resources_SetCostRUB_PurchaseFactor(temp_s1, temp_f3);
+        Resources_SetCostRUB_SellFactor(temp_s1, temp_f4);
 
-        strcat(temp_c1, "resource: ");
-        strcat(temp_c1, temp_s1);
-        strcat(temp_c1, NEWLINE);
-        strcat(temp_c1, "natoSell: ");
-        strcat(temp_c1, temp_f1);
-        strcat(temp_c1, " natoBuy: ");
-        strcat(temp_c1, temp_f2);
-        strcat(temp_c1, NEWLINE);
-        strcat(temp_c1, "ussrSell: ");
-        strcat(temp_c1, temp_f3);
-        strcat(temp_c1, " ussrBuy: ");
-        strcat(temp_c1, temp_f4);
-        strcat(temp_c1, NEWLINE);
-        strcat(temp_c1, NEWLINE);
+        //natoResourcesIn.GetTradeCostUSD_SellFactor();
+        //natoResourcesOut.GetTradeCostUSD_PurchaseFactor();
+        //ussrResourcesIn.GetTradeCostRUB_SellFactor();
+        //ussrResourcesOut.GetTradeCostRUB_PurchaseFactor();
+
+        //strcat(temp_c1, "r: ");
+        //strcat(temp_c1, temp_s1);
+        //strcat(temp_c1, NEWLINE);
+        //strcat(temp_c1, "nS: ");
+        //strcat(temp_c1, temp_f1);
+        //strcat(temp_c1, " nB: ");
+        //strcat(temp_c1, temp_f2);
+        //strcat(temp_c1, NEWLINE);
+        //strcat(temp_c1, "uS: ");
+        //strcat(temp_c1, temp_f3);
+        //strcat(temp_c1, " uB: ");
+        //strcat(temp_c1, temp_f4);
+        //strcat(temp_c1, NEWLINE);
+        //strcat(temp_c1, NEWLINE);
     }
 
-    //Scenario_WindowWithImageTopLeft("test", temp_c1, "", 3);
+    //Scenario_WindowWithImageTopLeft("trade info", temp_c1, "", 3);
     returnVoid();
 }
 
 defineVariable(float, natoRepGained);
 defineVariable(float, ussrRepGained);
+defineVariable(float, natoRepLast);
+defineVariable(float, ussrRepLast);
 defineFunction(ProcessTradeResources, void)
 {
     temp_i1 = lastTradeSaveDayLong % 365;
@@ -242,6 +272,8 @@ defineFunction(ProcessTradeResources, void)
 
     natoRepGained = 0;
     ussrRepGained = 0;
+    natoRepLast = natoRep;
+    ussrRepLast = ussrRep;
 
     Building_GetNumberOfBuildings(buildingCount);
     Vehicle_GetNumberOfVehicles(vehicleCount);
@@ -705,8 +737,21 @@ defineFunction(ProcessTradeResources, void)
         ussrRepGained = ussrRepGained + (ussrResourcesOut.usagewater * REP_TRADE_DIFFICULTY_MULTIPLIER * tradeRepMultipliers[USAGEWATER] * ussrRepGainPer[USAGEWATER]);
     }
     
-    natoRep = natoRep + natoRepGained;
-    ussrRep = ussrRep + ussrRepGained;
+    temp_f1 = natoRep + natoRepGained;
+    temp_f2 = MinFloat(temp_f1, MAX_REP_FROM_TRADE);
+    // In case you've gained rep in other ways, make sure your current rep always takes precedence
+    natoRep = MaxFloat(natoRep, temp_f2);
+    // Limit rep between 0 and 999
+    natoRep = MinFloat(natoRep, 999.0);
+    natoRep = MaxFloat(natoRep, 0.0);
+    
+    temp_f1 = ussrRep + ussrRepGained;
+    temp_f2 = MinFloat(temp_f1, MAX_REP_FROM_TRADE);
+    // In case you've gained rep in other ways, make sure your current rep always takes precedence
+    ussrRep = MaxFloat(ussrRep, temp_f2);
+    // Limit rep between 0 and 999
+    ussrRep = MinFloat(ussrRep, 999.0);
+    ussrRep = MaxFloat(ussrRep, 0.0);
 
     strcat(temp_c1, NEWLINE);
     strcat(temp_c1, "Nato rep gained from exports: ");
@@ -715,8 +760,12 @@ defineFunction(ProcessTradeResources, void)
     strcat(temp_c1, "Ussr rep gained from exports: ");
     strcat(temp_c1, ussrRepGained);
     strcat(temp_c1, NEWLINE);
-
-    lastTradeSaveDayLong = saveDayLong;
+    
+    Objectives_CreateNewString("reputationGainedTrade", "Reputation gained from trade");
+    Objective_AddRequirement("reputationGainedTrade", 0.000, "images/east_icon.png");
+    Objective_UpdateRequirement("reputationGainedTrade", 0, ussrRepGained);
+    Objective_AddRequirement("reputationGainedTrade", 0.000, "images/west_icon.png");
+    Objective_UpdateRequirement("reputationGainedTrade", 1, natoRepGained);
 
     returnVoid();
 }
@@ -736,15 +785,16 @@ defineFunction(CalculateTrade, void)
     {
         ProcessTradeResources();
         lastTradeUpdateDay = 1;
+        lastTradeSaveDayLong = saveDayLong;
     }
     elseif (day ? 2 & lastTradeUpdateDay ? 1)
     {
-        //UpdateTradeFactors();
+        //UpdateTradeValues();
         lastTradeUpdateDay = 2;
     }
     elseif (day ? 3 & lastTradeUpdateDay ? 2)
     {
-        //UpdateTradeValues();
+        //UpdateTradeFactors();
         lastTradeUpdateDay = 0;
     }
     else ()
@@ -752,7 +802,7 @@ defineFunction(CalculateTrade, void)
         lastTradeUpdateDay = 0;
     }
         
-    Scenario_WindowWithImageTopLeft("test trade", temp_c1, "", 3);
+    //Scenario_WindowWithImageTopLeft("test trade", temp_c1, "", 3);
     
     returnVoid();
 }

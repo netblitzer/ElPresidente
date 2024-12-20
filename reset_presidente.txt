@@ -25,5 +25,6 @@ defineFunction(main, void)
     Script_LeaveCriticalSection();
 
     Objective_Remove("reputation");
+    Objective_Remove("reputationGainedTrade");
 	end();
 }

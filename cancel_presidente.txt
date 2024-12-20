@@ -1,5 +1,9 @@
 include("include/SOVIETInstructions.txt");
+defineVariable(int, i);
+include("include/trade/trade_declarations.txt");
+include("include/trade/trade_helper_functions.txt");
 defineVariable(char, script);
+defineVariable(string, s1);
 
 defineFunction(main, void)
 {
@@ -9,6 +13,17 @@ defineFunction(main, void)
 		Script_DestroyByName("presidente.txt");
 	}
 
+	for(i = 0, i < 53, i = i + 1)
+	{
+        s1 = GetResourceStringFromIndex(i);
+
+        Resources_SetCostUSD_PurchaseFactor(s1, 1.0);
+        Resources_SetCostUSD_SellFactor(s1, 1.0);
+        Resources_SetCostRUB_PurchaseFactor(s1, 1.0);
+        Resources_SetCostRUB_SellFactor(s1, 1.0);
+	}
+
     Objective_Remove("reputation");
+    Objective_Remove("reputationGainedTrade");
 	end();
 }

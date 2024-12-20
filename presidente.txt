@@ -4,7 +4,7 @@ include("settings.txt");
 include("include/helper_functions.txt");
 include("include/save_functions.txt");
 include("include/dialogue/dialogues.txt");
-include("include/trade.txt");
+include("include/trade/trade.txt");
 
 defineFunction(UpdateStateValues, void)
 {
@@ -43,7 +43,16 @@ defineFunction(main, void)
     Script_GetGameTime(timeLast);
     Script_EnterCriticalSection();
     ReadSaveData();
+
+    UpdateTradeValues();
+    UpdateTradeFactors();
     Script_LeaveCriticalSection();
+    
+    // Notifications can't have char strings, annoying
+    //temp_3v1.x = 0;
+    //temp_3v1.y = 0;
+    //temp_3v1.z = 0;
+    //Notification_CreateNewStringPic("You have a bad trade", "One of your trades is negatively impacting you", "", temp_3v1);
 
     if (tutorialState ? 1)
     {
@@ -109,6 +118,11 @@ defineFunction(main, void)
                 {
                     CalculateTrade();
                 }
+            }
+
+            if (day ? 7)
+            {
+                Objective_Remove("reputationGainedTrade");
             }
 
             Objective_Exist("reputation", objectiveExists);

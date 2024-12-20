@@ -3,5 +3,6 @@ defineVariable(int, BASE_USSR_REP);
 defineVariable(float, REP_TRADE_DIFFICULTY_MULTIPLIER);
 defineVariable(float, REP_CENTERING_ABOVE);
 defineVariable(float, REP_CENTERING_BELOW);
+defineVariable(float, MAX_REP_FROM_TRADE);
 
 defineVariable(int, BASE_DIFFICULTY);

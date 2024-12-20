@@ -1,0 +1,220 @@
+defineVariable(string, resourceStringOut);
+defineFunction(GetResourceStringFromIndex, string, int:i_in_index)
+{
+    resourceStringOut = "";
+
+    if (i_in_index ? 0)
+    {
+        resourceStringOut = "rawbauxite";
+    }
+    elseif (i_in_index ? 1)
+    {
+        resourceStringOut = "bauxite";
+    }
+    elseif (i_in_index ? 2)
+    {
+        resourceStringOut = "alumina";
+    }
+    elseif (i_in_index ? 3)
+    {
+        resourceStringOut = "aluminium";
+    }
+    elseif (i_in_index ? 4)
+    {
+        resourceStringOut = "rawcoal";
+    }
+    elseif (i_in_index ? 5)
+    {
+        resourceStringOut = "coal";
+    }
+    elseif (i_in_index ? 6)
+    {
+        resourceStringOut = "bricks";
+    }
+    elseif (i_in_index ? 7)
+    {
+        resourceStringOut = "rawgravel";
+    }
+    elseif (i_in_index ? 8)
+    {
+        resourceStringOut = "gravel";
+    }
+    elseif (i_in_index ? 9)
+    {
+        resourceStringOut = "prefabpanels";
+    }
+    elseif (i_in_index ? 10)
+    {
+        resourceStringOut = "cement";
+    }
+    elseif (i_in_index ? 11)
+    {
+        resourceStringOut = "concrete";
+    }
+    elseif (i_in_index ? 12)
+    {
+        resourceStringOut = "asphalt";
+    }
+    elseif (i_in_index ? 13)
+    {
+        resourceStringOut = "rawiron";
+    }
+    elseif (i_in_index ? 14)
+    {
+        resourceStringOut = "iron";
+    }
+    elseif (i_in_index ? 15)
+    {
+        resourceStringOut = "steel";
+    }
+    elseif (i_in_index ? 16)
+    {
+        resourceStringOut = "mcomponents";
+    }
+    elseif (i_in_index ? 17)
+    {
+        resourceStringOut = "plants";
+    }
+    elseif (i_in_index ? 18)
+    {
+        resourceStringOut = "livestock";
+    }
+    elseif (i_in_index ? 19)
+    {
+        resourceStringOut = "meat";
+    }
+    elseif (i_in_index ? 20)
+    {
+        resourceStringOut = "food";
+    }
+    elseif (i_in_index ? 21)
+    {
+        resourceStringOut = "alcohol";
+    }
+    elseif (i_in_index ? 22)
+    {
+        resourceStringOut = "fabric";
+    }
+    elseif (i_in_index ? 23)
+    {
+        resourceStringOut = "clothes";
+    }
+    elseif (i_in_index ? 24)
+    {
+        resourceStringOut = "wood";
+    }
+    elseif (i_in_index ? 25)
+    {
+        resourceStringOut = "boards";
+    }
+    elseif (i_in_index ? 26)
+    {
+        resourceStringOut = "explosives";
+    }
+    elseif (i_in_index ? 27)
+    {
+        resourceStringOut = "oil";
+    }
+    elseif (i_in_index ? 28)
+    {
+        resourceStringOut = "fuel";
+    }
+    elseif (i_in_index ? 29)
+    {
+        resourceStringOut = "bitumen";
+    }
+    elseif (i_in_index ? 30)
+    {
+        resourceStringOut = "chemicals";
+    }
+    elseif (i_in_index ? 31)
+    {
+        resourceStringOut = "plastics";
+    }
+    elseif (i_in_index ? 32)
+    {
+        resourceStringOut = "ecomponents";
+    }
+    elseif (i_in_index ? 33)
+    {
+        resourceStringOut = "eletronics";
+    }
+    elseif (i_in_index ? 34)
+    {
+        resourceStringOut = "uranium";
+    }
+    elseif (i_in_index ? 35)
+    {
+        resourceStringOut = "yellowcake";
+    }
+    elseif (i_in_index ? 36)
+    {
+        resourceStringOut = "uf6";
+    }
+    elseif (i_in_index ? 37)
+    {
+        resourceStringOut = "nuclearfuel";
+    }
+    elseif (i_in_index ? 38)
+    {
+        resourceStringOut = "nuclearfuelburned";
+    }
+    elseif (i_in_index ? 39)
+    {
+        resourceStringOut = "fertiliser";
+    }
+    elseif (i_in_index ? 40)
+    {
+        resourceStringOut = "fertiliser_liquid";
+    }
+    elseif (i_in_index ? 41)
+    {
+        resourceStringOut = "service_material";
+    }
+    elseif (i_in_index ? 42)
+    {
+        resourceStringOut = "waste_mixed";
+    }
+    elseif (i_in_index ? 43)
+    {
+        resourceStringOut = "waste_gravel";
+    }
+    elseif (i_in_index ? 44)
+    {
+        resourceStringOut = "waste_steel";
+    }
+    elseif (i_in_index ? 45)
+    {
+        resourceStringOut = "waste_aluminium";
+    }
+    elseif (i_in_index ? 46)
+    {
+        resourceStringOut = "waste_plastic";
+    }
+    elseif (i_in_index ? 47)
+    {
+        resourceStringOut = "waste_bio";
+    }
+    elseif (i_in_index ? 48)
+    {
+        resourceStringOut = "waste_burnable";
+    }
+    elseif (i_in_index ? 49)
+    {
+        resourceStringOut = "waste_ash";
+    }
+    elseif (i_in_index ? 50)
+    {
+        resourceStringOut = "waste_other";
+    }
+    elseif (i_in_index ? 51)
+    {
+        resourceStringOut = "water";
+    }
+    elseif (i_in_index ? 52)
+    {
+        resourceStringOut = "usagewater";
+    }
+    
+    return(resourceStringOut);
+}
